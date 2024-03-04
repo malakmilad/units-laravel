@@ -48,14 +48,14 @@
                                     src="{{ asset('FeaturedMedia' . '/' . $term->media->featured_image) }}"></td>
                             <td>
                                 <a class="show-term-btn" data-toggle="modal" data-target="#showTermCard"
-                                    data-id="{{ encrypt($term->id) }}" style="cursor: pointer">
+                                    data-id="{{ Hashids::encode($term->id) }}" style="cursor: pointer">
                                     <i class="bi bi-eye-fill"></i>
                                 </a>
                                 <a class="edit-term-btn" data-toggle="modal" data-target="#editTermForm"
-                                    data-id="{{ encrypt($term->id) }}" style="cursor: pointer">
+                                    data-id="{{ Hashids::encode($term->id) }}" style="cursor: pointer">
                                     <i class="bi bi-pen"></i>
                                 </a>
-                                <a href="{{ route('term.destroy', encrypt($term->id)) }}"><i class="bi bi-trash"></i></a>
+                                <a href="{{ route('term.destroy', Hashids::encode($term->id)) }}"><i class="bi bi-trash"></i></a>
                             </td>
                         </tr>
                     @endforeach

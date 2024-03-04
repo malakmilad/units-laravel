@@ -42,10 +42,10 @@
                                 </div>
                                 <div class="action d-flex justify-content-center">
                                     <a class="show-btn" data-toggle="modal" data-target="#showMediaModal"
-                                        data-id="{{ encrypt($image->id) }}" style="cursor: pointer"><i
+                                        data-id="{{ Hashids::encode($image->id) }}" style="cursor: pointer"><i
                                             class="bi bi-eye-fill"></i></a>
                                     <a class="edit-btn" data-toggle="modal" data-target="#editMediaModal"
-                                        data-id="{{ encrypt($image->id) }}" style="cursor: pointer"><i
+                                        data-id="{{ Hashids::encode($image->id) }}" style="cursor: pointer"><i
                                             class="bi bi-pen"></i></a>
                                     <a href="{{ route('media.destroy', $image->id) }}"><i class="bi bi-trash"></i></a>
                                 </div>

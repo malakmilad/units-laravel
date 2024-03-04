@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreTypeRequest;
 use App\Http\Requests\UpdateTypeRequest;
 use App\Models\Type;
+use Vinkla\Hashids\Facades\Hashids;
 
 class TypeController extends Controller
 {
@@ -41,7 +42,8 @@ class TypeController extends Controller
      */
     public function show($encryptedId)
     {
-        $id = decrypt($encryptedId);
+        // $id = decrypt($encryptedId);
+        $id = Hashids::decode($encryptedId)[0];
         $type = Type::findOrFail($id);
         return view('type.show', compact('type'));
     }
@@ -51,7 +53,8 @@ class TypeController extends Controller
      */
     public function edit($encryptedId)
     {
-        $id = decrypt($encryptedId);
+        // $id = decrypt($encryptedId);
+        $id = Hashids::decode($encryptedId)[0];
         $type = Type::findOrFail($id);
         return view('type.edit', compact('type'));
     }
@@ -61,7 +64,8 @@ class TypeController extends Controller
      */
     public function update(UpdateTypeRequest $request, $encryptedId)
     {
-        $id = decrypt($encryptedId);
+        // $id = decrypt($encryptedId);
+        $id = Hashids::decode($encryptedId)[0];
         $type = Type::findOrFail($id);
         $type->update([
             'name' => $request->name,
@@ -75,7 +79,8 @@ class TypeController extends Controller
      */
     public function destroy($encryptedId)
     {
-        $id = decrypt($encryptedId);
+        // $id = decrypt($encryptedId);
+        $id = Hashids::decode($encryptedId)[0];
         $type = Type::findOrFail($id);
         $type->delete();
         return redirect()->route('types.index')->with(['success' => 'Type Deleted Successfully']);

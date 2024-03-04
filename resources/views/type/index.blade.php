@@ -27,14 +27,14 @@
                             <td>{{ $type->name }}</td>
                             <td>
                                 <a class="show-type-btn" data-toggle="modal" data-target="#showTypeCard"
-                                    data-id="{{ encrypt($type->id) }}" style="cursor: pointer">
+                                    data-id="{{ Hashids::encode($type->id) }}" style="cursor: pointer">
                                     <i class="bi bi-eye-fill"></i>
                                 </a>
                                 <a class="edit-type-btn" data-toggle="modal" data-target="#editTypeForm"
-                                    data-id="{{ encrypt($type->id) }}" style="cursor: pointer">
+                                    data-id="{{ Hashids::encode($type->id) }}" style="cursor: pointer">
                                     <i class="bi bi-pen"></i>
                                 </a>
-                                <a href="{{ route('type.destroy', encrypt($type->id)) }}"><i class="bi bi-trash"></i></a>
+                                <a href="{{ route('type.destroy', Hashids::encode($type->id)) }}"><i class="bi bi-trash"></i></a>
                             </td>
                         </tr>
                     @endforeach

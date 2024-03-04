@@ -48,14 +48,14 @@
                                     src="{{ asset('FeaturedMedia' . '/' . $taxonomy->media->featured_image) }}"></td>
                             <td>
                                 <a class="show-tax-btn" data-toggle="modal" data-target="#showTaxCard"
-                                    data-id="{{ encrypt($taxonomy->id) }}" style="cursor: pointer">
+                                    data-id="{{ Hashids::encode($taxonomy->id) }}" style="cursor: pointer">
                                     <i class="bi bi-eye-fill"></i>
                                 </a>
                                 <a class="edit-tax-btn" data-toggle="modal" data-target="#editTaxForm"
-                                    data-id="{{ encrypt($taxonomy->id) }}" style="cursor: pointer">
+                                    data-id="{{ Hashids::encode($taxonomy->id) }}" style="cursor: pointer">
                                     <i class="bi bi-pen"></i>
                                 </a>
-                                <a href="{{ route('taxonomy.destroy', encrypt($taxonomy->id)) }}"><i
+                                <a href="{{ route('taxonomy.destroy', Hashids::encode($taxonomy->id)) }}"><i
                                         class="bi bi-trash"></i></a>
                             </td>
                         </tr>

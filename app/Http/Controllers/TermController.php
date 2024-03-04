@@ -9,6 +9,7 @@ use App\Models\Taxonomy;
 use App\Models\Term;
 use Cviebrock\EloquentSluggable\Services\SlugService;
 use Illuminate\Http\Request;
+use Vinkla\Hashids\Facades\Hashids;
 
 class TermController extends Controller
 {
@@ -51,7 +52,8 @@ class TermController extends Controller
      */
     public function show($encryptedId)
     {
-        $id = decrypt($encryptedId);
+        // $id = decrypt($encryptedId);
+        $id = Hashids::decode($encryptedId)[0];
         $term = Term::findOrFail($id);
         return view('term.show', compact('term'));
     }
@@ -61,7 +63,8 @@ class TermController extends Controller
      */
     public function edit($encryptedId)
     {
-        $id = decrypt($encryptedId);
+        // $id = decrypt($encryptedId);
+        $id = Hashids::decode($encryptedId)[0];
         $term = Term::findOrFail($id);
         $taxonomies = Taxonomy::all();
         $media = Media::all();
@@ -73,7 +76,8 @@ class TermController extends Controller
      */
     public function update(UpdateTermRequest $request, $encryptedId)
     {
-        $id = decrypt($encryptedId);
+        // $id = decrypt($encryptedId);
+        $id = Hashids::decode($encryptedId)[0];
         $term = Term::findOrFail($id);
         $term->update([
             'media_id' => $request->media_id,
@@ -90,7 +94,8 @@ class TermController extends Controller
      */
     public function destroy($encryptedId)
     {
-        $id = decrypt($encryptedId);
+        // $id = decrypt($encryptedId);
+        $id = Hashids::decode($encryptedId)[0];
         $term = Term::findOrFail($id);
         $term->delete();
         return redirect()->route('terms.index')->with(['success' => 'Term Deleted Successfully']);

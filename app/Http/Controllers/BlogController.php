@@ -10,6 +10,7 @@ use App\Models\Taxonomy;
 use App\Models\Type;
 use Cviebrock\EloquentSluggable\Services\SlugService;
 use Illuminate\Http\Request;
+use Vinkla\Hashids\Facades\Hashids;
 
 class BlogController extends Controller
 {
@@ -29,8 +30,8 @@ class BlogController extends Controller
     {
         $media = Media::all();
         $taxonomies = Taxonomy::all();
-        $types=Type::all();
-        return view('blog.create', compact('media', 'taxonomies','types'));
+        $types = Type::all();
+        return view('blog.create', compact('media', 'taxonomies', 'types'));
     }
 
     /**
@@ -44,7 +45,7 @@ class BlogController extends Controller
             'slug' => $request->slug,
             'body' => $request->body,
             'media_id' => $request->media_id,
-            'type_id'=>$request->type_id
+            'type_id' => $request->type_id,
         ]);
         $blog->taxonomies()->attach($taxonomies);
         return redirect()->route('blogs.index')->with(['success' => 'Blogs Created Successfully']);
@@ -52,19 +53,22 @@ class BlogController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function show($encryptedId){
-        $id = decrypt($encryptedId);
+    public function show($encryptedId)
+    {
+        // $id = decrypt($encryptedId);
+        $id = Hashids::decode($encryptedId)[0];
         $blog = Blog::findOrFail($id);
-        return view('blog.show',compact('blog'));
+        return view('blog.show', compact('blog'));
     }
     public function edit($encryptedId)
     {
-        $id = decrypt($encryptedId);
+        // $id = decrypt($encryptedId);
+        $id = Hashids::decode($encryptedId)[0];
         $blog = Blog::findOrFail($id);
         $media = Media::all();
         $taxonomies = Taxonomy::all();
-        $types=Type::all();
-        return view('blog.edit', compact('blog', 'media', 'taxonomies','types'));
+        $types = Type::all();
+        return view('blog.edit', compact('blog', 'media', 'taxonomies', 'types'));
     }
 
     /**
@@ -72,7 +76,8 @@ class BlogController extends Controller
      */
     public function update(UpdateBlogRequest $request, $encryptedId)
     {
-        $id = decrypt($encryptedId);
+        // $id = decrypt($encryptedId);
+        $id = Hashids::decode($encryptedId)[0];
         $blog = Blog::findOrFail($id);
         $taxonomies = $request->taxonomy_id;
         $blog->update([
@@ -80,7 +85,7 @@ class BlogController extends Controller
             'slug' => $request->slug,
             'body' => $request->body,
             'media_id' => $request->media_id,
-            'type_id'=>$request->type_id
+            'type_id' => $request->type_id,
         ]);
         $blog->taxonomies()->sync($taxonomies);
         return redirect()->route('blogs.index')->with(['success' => 'Blogs Updated Successfully']);
@@ -91,7 +96,8 @@ class BlogController extends Controller
      */
     public function destroy($encryptedId)
     {
-        $id = decrypt($encryptedId);
+        // $id = decrypt($encryptedId);
+        $id = Hashids::decode($encryptedId)[0];
         $blog = Blog::findOrFail($id);
         $blog->taxonomies()->detach();
         $blog->delete();

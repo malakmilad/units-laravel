@@ -1,4 +1,4 @@
-<form action="{{ route('type.update', encrypt($type->id)) }}" method="POST">
+<form action="{{ route('type.update', Hashids::encode($type->id)) }}" method="POST">
     @csrf
     @method('PUT')
     <div class="row mb-3">

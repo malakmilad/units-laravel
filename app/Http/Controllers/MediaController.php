@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreMediaRequest;
-use App\Http\Requests\UpdateMediaRequest;
 use App\Models\Media;
 use Illuminate\Http\Request;
+use Vinkla\Hashids\Facades\Hashids;
 
 class MediaController extends Controller
 {
@@ -52,7 +52,8 @@ class MediaController extends Controller
      */
     public function show($encryptedId)
     {
-        $id = decrypt($encryptedId);
+        // $id = decrypt($encryptedId);
+        $id = Hashids::decode($encryptedId)[0];
         $media = Media::findOrFail($id);
         return view('media.show', compact('media'));
     }
@@ -61,7 +62,8 @@ class MediaController extends Controller
      */
     public function edit($encryptedId)
     {
-        $id = decrypt($encryptedId);
+        // $id = decrypt($encryptedId);
+        $id = Hashids::decode($encryptedId)[0];
         $media = Media::findOrFail($id);
         return view('media.edit', compact('media'));
     }
@@ -70,7 +72,8 @@ class MediaController extends Controller
      */
     public function update(Request $request, $encryptedId)
     {
-        $id = decrypt($encryptedId);
+        // $id = decrypt($encryptedId);
+        $id = Hashids::decode($encryptedId)[0];
         $media = Media::findOrFail($id);
         $media->update([
             'title' => $request->title,
@@ -83,8 +86,10 @@ class MediaController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Media $media)
+    public function destroy($encryptedId)
     {
+        $id = Hashids::decode($encryptedId)[0];
+        $media = Media::findOrFail($id);
         $media->delete();
         return redirect()->route('media.index')->with(['success' => 'Media Deleted Successfully']);
     }

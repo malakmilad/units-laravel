@@ -1,4 +1,4 @@
-<form class="row g-3" method="POST" action="{{route('media.update',encrypt($media->id))}}">
+<form class="row g-3" method="POST" action="{{route('media.update',Hashids::encode($media->id))}}">
     @csrf
     @method('PUT')
     <div class="col-md-6">

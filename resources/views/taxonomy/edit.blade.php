@@ -1,4 +1,4 @@
-<form action="{{ route('taxonomy.update', encrypt($taxonomy->id)) }}" method="POST">
+<form action="{{ route('taxonomy.update', Hashids::encode($taxonomy->id)) }}" method="POST">
     @csrf
     @method('PUT')
     <div class="row mb-3">
