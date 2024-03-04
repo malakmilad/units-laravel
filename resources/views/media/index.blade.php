@@ -47,7 +47,8 @@
                                     <a class="edit-btn" data-toggle="modal" data-target="#editMediaModal"
                                         data-id="{{ Hashids::encode($image->id) }}" style="cursor: pointer"><i
                                             class="bi bi-pen"></i></a>
-                                    <a href="{{ route('media.destroy', $image->id) }}"><i class="bi bi-trash"></i></a>
+                                    <a href="{{ route('media.destroy', Hashids::encode($image->id)) }}"><i
+                                            class="bi bi-trash"></i></a>
                                 </div>
                             </div>
                         @endforeach
