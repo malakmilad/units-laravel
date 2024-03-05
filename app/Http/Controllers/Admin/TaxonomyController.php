@@ -1,7 +1,7 @@
 <?php
 
-namespace App\Http\Controllers;
-
+namespace App\Http\Controllers\Admin;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreTaxonomyRequest;
 use App\Http\Requests\UpdateTaxonomyRequest;
 use App\Models\Media;

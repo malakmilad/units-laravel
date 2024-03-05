@@ -1,12 +1,11 @@
 <?php
 
-use App\Http\Controllers\BlogController;
-use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\MediaController;
+use App\Http\Controllers\Admin\BlogController;
+use App\Http\Controllers\Admin\MediaController;
+use App\Http\Controllers\Admin\TaxonomyController;
+use App\Http\Controllers\Admin\TermController;
+use App\Http\Controllers\Admin\TypeController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\TaxonomyController;
-use App\Http\Controllers\TermController;
-use App\Http\Controllers\TypeController;
 use Illuminate\Support\Facades\Route;
 
 /*
