@@ -16,7 +16,7 @@
               </a>
           </li><!-- End Components Nav -->
           <li class="nav-item">
-              <a class="nav-link collapsed" data-bs-target="#type_tab" data-bs-toggle="collapse" href="#">
+              <a class="nav-link collapsed" data-bs-target="#type_tab" data-bs-toggle="collapse">
                   <i class="bi bi-hash"></i><span>Types</span><i class="bi bi-chevron-down ms-auto"></i>
               </a>
               <ul id="type_tab" class="nav-content collapse " data-bs-parent="#sidebar-nav">
@@ -33,7 +33,7 @@
               </ul>
           </li><!-- End Tables Nav -->
           <li class="nav-item">
-              <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse" href="#">
+              <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse">
                   <i class="bi bi-grid"></i><span>Taxomoies</span><i class="bi bi-chevron-down ms-auto"></i>
               </a>
               <ul id="tables-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
@@ -50,7 +50,7 @@
               </ul>
           </li><!-- End Tables Nav -->
           <li class="nav-item">
-              <a class="nav-link collapsed" data-bs-target="#tax_nav" data-bs-toggle="collapse" href="#">
+              <a class="nav-link collapsed" data-bs-target="#tax_nav" data-bs-toggle="collapse">
                   <i class="bi bi-grid"></i><span>Terms</span><i class="bi bi-chevron-down ms-auto"></i>
               </a>
               <ul id="tax_nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
@@ -68,7 +68,7 @@
           </li><!-- End Tables Nav -->
           @foreach ($types as $type)
               <li class="nav-item">
-                  <a class="nav-link collapsed" data-bs-target="#{{$type->name}}-{{$type->id}}" data-bs-toggle="collapse" href="#">
+                  <a class="nav-link collapsed" data-bs-target="#{{$type->name}}-{{$type->id}}" data-bs-toggle="collapse">
                       <i class="bi bi-file-post"></i><span>{{$type->name}}</span><i class="bi bi-chevron-down ms-auto"></i>
                   </a>
                   <ul id="{{$type->name}}-{{$type->id}}" class="nav-content collapse " data-bs-parent="#sidebar-nav">

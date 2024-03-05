@@ -17,13 +17,13 @@
         <ul class="d-flex align-items-center">
 
             <li class="nav-item d-block d-lg-none">
-                <a class="nav-link nav-icon search-bar-toggle " href="#">
+                <a class="nav-link nav-icon search-bar-toggle " >
                     <i class="bi bi-search"></i>
                 </a>
             </li><!-- End Search Icon-->
             <li class="nav-item dropdown pe-3">
 
-                <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#"
+                <a class="nav-link nav-profile d-flex align-items-center pe-0"
                     data-bs-toggle="dropdown">
                     <span class="d-none d-md-block dropdown-toggle ps-2">K. Anderson</span>
                 </a><!-- End Profile Iamge Icon -->
@@ -61,7 +61,7 @@
                     </li>
 
                     <li>
-                        <a class="dropdown-item d-flex align-items-center" href="#">
+                        <a class="dropdown-item d-flex align-items-center">
                             <i class="bi bi-box-arrow-right"></i>
                             <span>Sign Out</span>
                         </a>
