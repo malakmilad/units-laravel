@@ -1,4 +1,4 @@
-<form action="{{ route('blog.update', encrypt($blog->id)) }}" method="POST">
+<form action="{{ route('blog.update', Hashids::encode($blog->id)) }}" method="POST">
     @csrf
     @method('PUT')
     <input type="hidden" name="type_id" value="{{$blog->type_id}}">

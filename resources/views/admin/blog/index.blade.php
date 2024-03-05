@@ -14,6 +14,13 @@
     </style>
 @endsection
 @section('content')
+    @if (Session::has('success'))
+        <div class="alert alert-primary alert-dismissible fade show" role="alert">
+            <i class="bi bi-check-circle me-1"></i>
+            {{ Session::get('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
     <div class="card">
         <div class="card-body p-0">
             <table class="table">
@@ -55,7 +62,8 @@
                                     data-id="{{ Hashids::encode($blog->id) }}" style="cursor: pointer">
                                     <i class="bi bi-pen"></i>
                                 </a>
-                                <a href="{{ route('blog.destroy', Hashids::encode($blog->id)) }}"><i class="bi bi-trash"></i></a>
+                                <a href="{{ route('blog.destroy', Hashids::encode($blog->id)) }}"><i
+                                        class="bi bi-trash"></i></a>
                                 {{-- <a class="toggle-edit-btn" id="edit_category_btn">
                                     <i class="bi bi-list "></i>
                                 </a> --}}
