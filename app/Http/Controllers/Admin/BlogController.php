@@ -18,21 +18,22 @@ class BlogController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index($type)
     {
-        $blogs = Blog::with('media', 'taxonomies')->get();
-        return view('admin.blog.index', compact('blogs'));
+        $selectedType = Type::find($type);
+        $blogs = Blog::with('media', 'taxonomies')->where('type_id',$type)->get();
+        return view('admin.blog.index', compact('blogs','selectedType'));
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create($type)
     {
         $media = Media::all();
         $taxonomies = Taxonomy::all();
-        $types = Type::all();
-        return view('admin.blog.create', compact('media', 'taxonomies', 'types'));
+        $selectedType = Type::find($type);
+        return view('admin.blog.create', compact('media', 'taxonomies','selectedType'));
     }
 
     /**
@@ -49,7 +50,7 @@ class BlogController extends Controller
             'type_id' => $request->type_id,
         ]);
         $blog->taxonomies()->attach($taxonomies);
-        return redirect()->route('blogs.index')->with(['success' => 'Blogs Created Successfully']);
+        return redirect()->route('blogs.index', ['type' => $request->type_id])->with(['success' => 'Blogs Created Successfully']);
     }
     /**
      * Show the form for editing the specified resource.
@@ -68,8 +69,7 @@ class BlogController extends Controller
         $blog = Blog::findOrFail($id);
         $media = Media::all();
         $taxonomies = Taxonomy::all();
-        $types = Type::all();
-        return view('admin.blog.edit', compact('blog', 'media', 'taxonomies', 'types'));
+        return view('admin.blog.edit', compact('blog', 'media', 'taxonomies'));
     }
 
     /**
@@ -89,7 +89,7 @@ class BlogController extends Controller
             'type_id' => $request->type_id,
         ]);
         $blog->taxonomies()->sync($taxonomies);
-        return redirect()->route('blogs.index')->with(['success' => 'Blogs Updated Successfully']);
+        return redirect()->route('blogs.index', ['type' => $request->type_id])->with(['success' => 'Blogs Created Successfully']);
     }
 
     /**
@@ -102,7 +102,7 @@ class BlogController extends Controller
         $blog = Blog::findOrFail($id);
         $blog->taxonomies()->detach();
         $blog->delete();
-        return redirect()->route('blogs.index')->with(['success' => 'Blog Deleted Successfully']);
+        return redirect()->route('blogs.index',['type'])->with(['success' => 'Blog Deleted Successfully']);
     }
     public function slug(Request $request)
     {

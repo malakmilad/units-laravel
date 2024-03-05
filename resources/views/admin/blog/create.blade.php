@@ -10,6 +10,7 @@
     <h5 class="card-title">Add New Blog</h5>
     <form action="{{ route('blog.store') }}" method="POST">
         @csrf
+        <input type="hidden" name="type_id" value="{{$selectedType->id}}">
         <div class="row mb-3">
             <div class="col-sm-10">
                 <button type="submit" class="btn btn-primary">
@@ -82,20 +83,6 @@
                                         </label>
                                     </div>
                                 @endforeach
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Types</h5>
-                        <div class="row mb-3">
-                            <div class="col-sm-10 d-flex">
-                                <select class="form-select" aria-label="Default select example" name="type_id">
-                                    @foreach ($types as $type)
-                                        <option value="{{ $type->id }}">{{ $type->name }}</option>
-                                    @endforeach
-                                </select>
                             </div>
                         </div>
                     </div>

@@ -48,17 +48,17 @@
                             </td>
                             <td>
                                 <a class="show-blog-btn" data-toggle="modal" data-target="#showBlogCard"
-                                    data-id="{{ encrypt($blog->id) }}" style="cursor: pointer">
+                                    data-id="{{ Hashids::encode($blog->id) }}" style="cursor: pointer">
                                     <i class="bi bi-eye-fill"></i>
                                 </a>
                                 <a class="edit-blog-btn" data-toggle="modal" data-target="#editBlogForm"
-                                    data-id="{{ encrypt($blog->id) }}" style="cursor: pointer">
+                                    data-id="{{ Hashids::encode($blog->id) }}" style="cursor: pointer">
                                     <i class="bi bi-pen"></i>
                                 </a>
-                                <a href="{{ route('blog.destroy', encrypt($blog->id)) }}"><i class="bi bi-trash"></i></a>
-                                <a class="toggle-edit-btn" id="edit_category_btn">
+                                <a href="{{ route('blog.destroy', Hashids::encode($blog->id)) }}"><i class="bi bi-trash"></i></a>
+                                {{-- <a class="toggle-edit-btn" id="edit_category_btn">
                                     <i class="bi bi-list "></i>
-                                </a>
+                                </a> --}}
                             </td>
                         </tr>
                     @endforeach

@@ -33,8 +33,8 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     //?blog
-    Route::get('/blogs',[BlogController::class,'index'])->name('blogs.index');
-    Route::get('/blog/create',[BlogController::class,'create'])->name('blog.create');
+    Route::get('/blogs/{type}',[BlogController::class,'index'])->name('blogs.index');
+    Route::get('/blog/create/{type}',[BlogController::class,'create'])->name('blog.create');
     Route::post('/blog/store',[BlogController::class,'store'])->name('blog.store');
     Route::get('/blog/show/{blog}',[BlogController::class,'show'])->name('blog.show');
     Route::get('/blog/edit/{blog}',[BlogController::class,'edit'])->name('blog.edit');
