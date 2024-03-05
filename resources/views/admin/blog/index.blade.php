@@ -1,4 +1,4 @@
-@extends('layouts.dashborad.admin')
+@extends('admin.layouts.app')
 @section('page-title')
     Welcome
 @endsection

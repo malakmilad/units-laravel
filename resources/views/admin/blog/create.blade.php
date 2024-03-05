@@ -1,4 +1,4 @@
-@extends('layouts.dashborad.admin')
+@extends('admin.layouts.app')
 @section('page-title')
     Welcome
 @endsection
@@ -7,8 +7,8 @@
     <link rel="stylesheet" href="{{ asset('assets/css/summernote.css') }}">
 @endsection
 @section('content')
-    <h5 class="card-title">Add New Term</h5>
-    <form action="{{route('term.store')}}" method="POST">
+    <h5 class="card-title">Add New Blog</h5>
+    <form action="{{ route('blog.store') }}" method="POST">
         @csrf
         <div class="row mb-3">
             <div class="col-sm-10">
@@ -73,9 +73,27 @@
                         <h5 class="card-title">Taxonomies</h5>
                         <div class="row mb-3">
                             <div class="col-sm-10">
-                                <select class="form-select" aria-label="Default select example" name="taxonomy_id">
-                                    @foreach ($taxonomies as $taxonomy)
-                                        <option value="{{ $taxonomy->id}}">{{ $taxonomy->title }}</option>
+                                @foreach ($taxonomies as $taxonomy)
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="gridCheck1" name="taxonomy_id[]"
+                                            value="{{ $taxonomy->id }}">
+                                        <label class="form-check-label" for="gridCheck1">
+                                            {{ $taxonomy->title }}
+                                        </label>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Types</h5>
+                        <div class="row mb-3">
+                            <div class="col-sm-10 d-flex">
+                                <select class="form-select" aria-label="Default select example" name="type_id">
+                                    @foreach ($types as $type)
+                                        <option value="{{ $type->id }}">{{ $type->name }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -104,7 +122,7 @@
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
     <script>
         $('#title').change(function(e) {
-            $.get('{{ route('term.slug') }}', {
+            $.get('{{ route('blog.slug') }}', {
                     'title': $(this).val()
                 },
                 function(data) {

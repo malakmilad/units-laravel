@@ -15,7 +15,7 @@ class TypeController extends Controller
     public function index()
     {
         $types = Type::all();
-        return view('type.index', compact('types'));
+        return view('admin.type.index', compact('types'));
     }
 
     /**
@@ -23,7 +23,7 @@ class TypeController extends Controller
      */
     public function create()
     {
-        return view('type.create');
+        return view('admin.type.create');
     }
 
     /**
@@ -45,7 +45,7 @@ class TypeController extends Controller
         // $id = decrypt($encryptedId);
         $id = Hashids::decode($encryptedId)[0];
         $type = Type::findOrFail($id);
-        return view('type.show', compact('type'));
+        return view('admin.type.show', compact('type'));
     }
 
     /**
@@ -56,7 +56,7 @@ class TypeController extends Controller
         // $id = decrypt($encryptedId);
         $id = Hashids::decode($encryptedId)[0];
         $type = Type::findOrFail($id);
-        return view('type.edit', compact('type'));
+        return view('admin.type.edit', compact('type'));
     }
 
     /**

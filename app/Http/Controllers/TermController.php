@@ -19,7 +19,7 @@ class TermController extends Controller
     public function index()
     {
         $terms = Term::with('media', 'taxonomy')->get();
-        return view('term.index', compact('terms'));
+        return view('admin.term.index', compact('terms'));
     }
 
     /**
@@ -29,7 +29,7 @@ class TermController extends Controller
     {
         $taxonomies = Taxonomy::all();
         $media = Media::all();
-        return view('term.create', compact('taxonomies', 'media'));
+        return view('admin.term.create', compact('taxonomies', 'media'));
     }
 
     /**
@@ -55,7 +55,7 @@ class TermController extends Controller
         // $id = decrypt($encryptedId);
         $id = Hashids::decode($encryptedId)[0];
         $term = Term::findOrFail($id);
-        return view('term.show', compact('term'));
+        return view('admin.term.show', compact('term'));
     }
 
     /**
@@ -68,7 +68,7 @@ class TermController extends Controller
         $term = Term::findOrFail($id);
         $taxonomies = Taxonomy::all();
         $media = Media::all();
-        return view('term.edit', compact('term', 'taxonomies', 'media'));
+        return view('admin.term.edit', compact('term', 'taxonomies', 'media'));
     }
 
     /**

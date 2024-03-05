@@ -15,7 +15,7 @@ class MediaController extends Controller
     public function index()
     {
         $media = Media::paginate(5);
-        return view('media.index', compact('media'));
+        return view('admin.media.index', compact('media'));
     }
     /**
      * Show the form for creating a new resource.
@@ -55,7 +55,7 @@ class MediaController extends Controller
         // $id = decrypt($encryptedId);
         $id = Hashids::decode($encryptedId)[0];
         $media = Media::findOrFail($id);
-        return view('media.show', compact('media'));
+        return view('admin.media.show', compact('media'));
     }
     /**
      * Show the form for editing the specified resource.
@@ -65,7 +65,7 @@ class MediaController extends Controller
         // $id = decrypt($encryptedId);
         $id = Hashids::decode($encryptedId)[0];
         $media = Media::findOrFail($id);
-        return view('media.edit', compact('media'));
+        return view('admin.media.edit', compact('media'));
     }
     /**
      * Update the specified resource in storage.

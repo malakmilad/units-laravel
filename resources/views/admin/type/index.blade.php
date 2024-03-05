@@ -1,7 +1,4 @@
-@extends('layouts.dashborad.admin')
-@section('page-title')
-    Welcome
-@endsection
+@extends('admin.layouts.app')
 @section('content')
     @if (Session::has('success'))
         <div class="alert alert-primary alert-dismissible fade show" role="alert">

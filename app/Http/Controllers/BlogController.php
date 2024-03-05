@@ -20,7 +20,7 @@ class BlogController extends Controller
     public function index()
     {
         $blogs = Blog::with('media', 'taxonomies')->get();
-        return view('blog.index', compact('blogs'));
+        return view('admin.blog.index', compact('blogs'));
     }
 
     /**
@@ -31,7 +31,7 @@ class BlogController extends Controller
         $media = Media::all();
         $taxonomies = Taxonomy::all();
         $types = Type::all();
-        return view('blog.create', compact('media', 'taxonomies', 'types'));
+        return view('admin.blog.create', compact('media', 'taxonomies', 'types'));
     }
 
     /**
@@ -58,7 +58,7 @@ class BlogController extends Controller
         // $id = decrypt($encryptedId);
         $id = Hashids::decode($encryptedId)[0];
         $blog = Blog::findOrFail($id);
-        return view('blog.show', compact('blog'));
+        return view('admin.blog.show', compact('blog'));
     }
     public function edit($encryptedId)
     {
@@ -68,7 +68,7 @@ class BlogController extends Controller
         $media = Media::all();
         $taxonomies = Taxonomy::all();
         $types = Type::all();
-        return view('blog.edit', compact('blog', 'media', 'taxonomies', 'types'));
+        return view('admin.blog.edit', compact('blog', 'media', 'taxonomies', 'types'));
     }
 
     /**

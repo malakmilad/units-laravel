@@ -19,7 +19,7 @@ class TaxonomyController extends Controller
     public function index()
     {
         $taxonomies = Taxonomy::with('media', 'type')->get();
-        return view('taxonomy.index', compact('taxonomies'));
+        return view('admin.taxonomy.index', compact('taxonomies'));
     }
 
     /**
@@ -29,7 +29,7 @@ class TaxonomyController extends Controller
     {
         $types = Type::all();
         $media = Media::all();
-        return view('taxonomy.create', compact('types', 'media'));
+        return view('admin.taxonomy.create', compact('types', 'media'));
     }
 
     /**
@@ -56,7 +56,7 @@ class TaxonomyController extends Controller
         // $id = decrypt($encryptedId);
         $id = Hashids::decode($encryptedId)[0];
         $taxonomy = Taxonomy::findOrFail($id);
-        return view('taxonomy.show', compact('taxonomy'));
+        return view('admin.taxonomy.show', compact('taxonomy'));
     }
 
     /**
@@ -70,7 +70,7 @@ class TaxonomyController extends Controller
         $taxonomy = Taxonomy::findOrFail($id);
         $types = Type::all();
         $media = Media::all();
-        return view('taxonomy.edit', compact('taxonomy', 'types', 'media'));
+        return view('admin.taxonomy.edit', compact('taxonomy', 'types', 'media'));
     }
 
     /**

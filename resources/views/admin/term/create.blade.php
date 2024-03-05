@@ -1,4 +1,4 @@
-@extends('layouts.dashborad.admin')
+@extends('admin.layouts.app')
 @section('page-title')
     Welcome
 @endsection
@@ -7,8 +7,8 @@
     <link rel="stylesheet" href="{{ asset('assets/css/summernote.css') }}">
 @endsection
 @section('content')
-    <h5 class="card-title">Add New Taxonmy</h5>
-    <form action="{{ route('taxonomy.store') }}" method="POST">
+    <h5 class="card-title">Add New Term</h5>
+    <form action="{{route('term.store')}}" method="POST">
         @csrf
         <div class="row mb-3">
             <div class="col-sm-10">
@@ -27,7 +27,7 @@
                             <label for="inputText" class="col-sm-2 col-form-label">Title</label>
                             <div class="col-sm-10">
                                 <input type="text" id="title" class="form-control" name="title"
-                                    value="{{ old('title') }}" placeholder="enter your title">
+                                    value="{{ old('title') }}" placeholder="enter yout title">
                                 <br>
                                 @error('title')
                                     <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -70,12 +70,12 @@
             <div class="col-6">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Types</h5>
+                        <h5 class="card-title">Taxonomies</h5>
                         <div class="row mb-3">
-                            <div class="col-sm-10 d-flex">
-                                <select class="form-select" aria-label="Default select example" name="type_id">
-                                    @foreach ($types as $type)
-                                        <option value="{{ $type->id }}">{{ $type->name }}</option>
+                            <div class="col-sm-10">
+                                <select class="form-select" aria-label="Default select example" name="taxonomy_id">
+                                    @foreach ($taxonomies as $taxonomy)
+                                        <option value="{{ $taxonomy->id}}">{{ $taxonomy->title }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -86,7 +86,7 @@
                     <div class="card-body">
                         <h5 class="card-title">Featured Image</h5>
                         <div class="row mb-3">
-                            <div class="col-sm-10 d-flex">
+                            <div class="col-sm-10">
                                 <select class="form-select" aria-label="Default select example" name="media_id">
                                     @foreach ($media as $image)
                                         <option value="{{ $image->id }}">{{ $image->id }}</option>
@@ -104,7 +104,7 @@
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
     <script>
         $('#title').change(function(e) {
-            $.get('{{ route('taxonomy.slug') }}', {
+            $.get('{{ route('term.slug') }}', {
                     'title': $(this).val()
                 },
                 function(data) {

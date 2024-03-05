@@ -1,4 +1,4 @@
-@extends('layouts.dashborad.admin')
+@extends('admin.layouts.app')
 @section('css')
     <link rel="stylesheet" href="{{asset('assets/css/media.css')}}">
 @endsection
