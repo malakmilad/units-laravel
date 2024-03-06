@@ -5,7 +5,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreMediaRequest;
 use App\Models\Media;
 use Illuminate\Http\Request;
+use Intervention\Image\ImageManager;
 use Vinkla\Hashids\Facades\Hashids;
+use Intervention\Image\Drivers\Gd\Driver;
 
 class MediaController extends Controller
 {
@@ -30,12 +32,19 @@ class MediaController extends Controller
      */
     public function store(StoreMediaRequest $request)
     {
+        $manager = new ImageManager(new Driver());
         if ($request->hasFile('featured_image')) {
             $featured_images = $request->file('featured_image');
             foreach ($featured_images as $image) {
                 $image_name = $image->getClientOriginalName();
+                $img=$manager->read($image);
+                $destinationPath = public_path(Media::MEDIA_PATH.'/');
+                $img->save($destinationPath.$image_name);
+                $destinationPathThumbnail = public_path(Media::MEDIA_PATH.'/thumbnail');
+                $img->resize(100,100);
+                $img->save($destinationPathThumbnail.$image_name);
                 $title = pathinfo($image_name, PATHINFO_FILENAME);
-                $image->move(Media::MEDIA_PATH, $image_name);
+                // $image->move(Media::MEDIA_PATH, $image_name);
                 Media::create([
                     'featured_image' => $image_name,
                     'title' => $title,
