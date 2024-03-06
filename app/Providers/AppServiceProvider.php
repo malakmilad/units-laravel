@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\Setting;
 use App\Models\Type;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\View;
@@ -24,6 +25,7 @@ class AppServiceProvider extends ServiceProvider
     {
         // $types=Type::all();
         View::share('types',Type::all());
+        View::share('settings',Setting::get(['key','value']));
         Paginator::useBootstrap();
     }
 }

@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\TaxonomyController;
 use App\Http\Controllers\Admin\TermController;
 use App\Http\Controllers\Admin\TypeController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SettingController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -74,6 +75,10 @@ Route::middleware('auth')->group(function () {
     Route::put('/term/update/{term}',[TermController::class,'update'])->name('term.update');
     Route::get('/term/destroy/{term}',[TermController::class,'destroy'])->name('term.destroy');
     Route::get('/term/slug',[TermController::class,'slug'])->name('term.slug');
+    //?setting
+    Route::get('/setting/edit',[SettingController::class,'edit'])->name('setting.edit');
+    Route::put('/setting/update',[SettingController::class,'update'])->name('setting.update');
+
 });
 
 require __DIR__.'/auth.php';
