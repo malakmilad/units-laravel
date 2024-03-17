@@ -21,6 +21,11 @@
               </a>
           </li><!-- End Components Nav -->
           <li class="nav-item">
+            <a class="nav-link" href="{{ route('media.file') }}">
+                <i class="bi bi-card-image"></i><span>File</span>
+            </a>
+        </li><!-- End Components Nav -->
+          <li class="nav-item">
               <a class="nav-link collapsed" data-bs-target="#type_tab" data-bs-toggle="collapse">
                   <i class="bi bi-hash"></i><span>Types</span><i class="bi bi-chevron-down ms-auto"></i>
               </a>

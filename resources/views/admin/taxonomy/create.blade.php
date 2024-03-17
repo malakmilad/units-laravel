@@ -82,7 +82,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="card">
+                @include('admin.file.index')
+                {{-- <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">Featured Image</h5>
                         <div class="row mb-3">
@@ -95,7 +96,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> --}}
             </div>
         </div>
     </form>

@@ -44,9 +44,9 @@
                             <td>{{ $taxonomy->slug }}</td>
                             <td>{{ $taxonomy->body }}</td>
                             <td>{{ $taxonomy->type->name }}</td>
-                            <td><img width="150" height="100"
+                            {{-- <td><img width="150" height="100"
                                     src="{{ asset('FeaturedMedia' . '/' . $taxonomy->media->featured_image) }}"></td>
-                            <td>
+                            <td> --}}
                                 <a class="show-tax-btn" data-toggle="modal" data-target="#showTaxCard"
                                     data-id="{{ Hashids::encode($taxonomy->id) }}" style="cursor: pointer">
                                     <i class="bi bi-eye-fill"></i>

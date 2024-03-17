@@ -9,7 +9,7 @@ class Media extends Model
 {
     use HasFactory;
     const MEDIA_PATH = 'FeaturedMedia';
-    protected $fillable = ['featured_image', 'title', 'alternative_text', 'caption', 'description'];
+    protected $fillable = ['featured_image', 'name', 'path','full-path','size','mtime'];
     protected $casts = [
         'featured_image' => 'array',
     ];

@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\TermController;
 use App\Http\Controllers\Admin\TypeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SettingController;
+use App\Models\Media;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -78,7 +79,15 @@ Route::middleware('auth')->group(function () {
     //?setting
     Route::get('/setting/edit',[SettingController::class,'edit'])->name('setting.edit');
     Route::put('/setting/update',[SettingController::class,'update'])->name('setting.update');
-
+    //?file
+    Route::get('/file',[MediaController::class,'file'])->name('media.file');
+    Route::post('/file/store', function () {
+        \EdSDK\FlmngrServer\FlmngrServer::flmngrRequest(
+            array(
+                'dirFiles' => base_path() . '/public'.'/'.Media::MEDIA_PATH
+            )
+        );
+    });
 });
 
 require __DIR__.'/auth.php';

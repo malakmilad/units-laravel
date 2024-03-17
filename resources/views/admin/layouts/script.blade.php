@@ -10,4 +10,5 @@
 
 <!-- Template Main JS File -->
 <script src="{{asset('assets/js/main.js')}}"></script>
+<script type="module" src="{{asset('assets/js/file.js')}}"></script>
 @yield('script')

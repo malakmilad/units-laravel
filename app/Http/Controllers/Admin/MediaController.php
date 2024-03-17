@@ -102,4 +102,7 @@ class MediaController extends Controller
         $media->delete();
         return redirect()->route('media.index')->with(['success' => 'Media Deleted Successfully']);
     }
+    public function file(){
+        return view('admin.file.index');
+    }
 }

@@ -37,11 +37,12 @@ class TaxonomyController extends Controller
      */
     public function store(StoreTaxonomyRequest $request)
     {
+        $media=Media::where("full-path",$request->url)->get()->toArray();
         Taxonomy::create([
             'title' => $request->title,
             'slug' => $request->slug,
             'body' => $request->body,
-            'media_id' => $request->media_id,
+            'media_id' => $media[0]['id'],
             'type_id' => $request->type_id,
         ]);
         return redirect()->route('taxonomies.index')->with(['success' => 'Taxonomy Created Successfully']);

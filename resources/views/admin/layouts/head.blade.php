@@ -31,4 +31,5 @@
 <!-- Template Main CSS File -->
 <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet">
 <link rel="stylesheet" href="{{ asset('assets/css/loader.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/css/file.css') }}">
 @yield('css')
