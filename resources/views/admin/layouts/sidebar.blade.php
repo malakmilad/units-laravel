@@ -1,14 +1,12 @@
   <!-- ======= Sidebar ======= -->
   <aside id="sidebar" class="sidebar">
-
       <ul class="sidebar-nav" id="sidebar-nav">
-
           <li class="nav-item">
               <a class="nav-link" href="{{ route('dashboard') }}">
                   <i class="bi bi-pie-chart"></i>
                   <span>Dashboard</span>
               </a>
-          </li><!-- End Dashboard Nav -->
+          </li>
           <li class="nav-item">
               <a class="nav-link" href="{{ route('setting.edit') }}">
                   <i class="bi bi-gear"></i>
@@ -19,12 +17,29 @@
               <a class="nav-link" href="{{ route('media.index') }}">
                   <i class="bi bi-card-image"></i><span>Media</span>
               </a>
-          </li><!-- End Components Nav -->
+          </li>
           <li class="nav-item">
-            <a class="nav-link" href="{{ route('media.file') }}">
-                <i class="bi bi-card-image"></i><span>File</span>
+              <a class="nav-link" href="{{ route('media.file') }}">
+                  <i class="bi bi-card-image"></i><span>File</span>
+              </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link collapsed" data-bs-target="#form_tab" data-bs-toggle="collapse">
+                <i class="bi bi-hash"></i><span>Forms</span><i class="bi bi-chevron-down ms-auto"></i>
             </a>
-        </li><!-- End Components Nav -->
+            <ul id="form_tab" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                <li>
+                    <a href="{{ route('form.index') }}">
+                        <i class="bi bi-circle"></i><span>All Forms</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('form.create') }}">
+                        <i class="bi bi-circle"></i><span>Add New Form</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
           <li class="nav-item">
               <a class="nav-link collapsed" data-bs-target="#type_tab" data-bs-toggle="collapse">
                   <i class="bi bi-hash"></i><span>Types</span><i class="bi bi-chevron-down ms-auto"></i>
@@ -41,7 +56,7 @@
                       </a>
                   </li>
               </ul>
-          </li><!-- End Tables Nav -->
+          </li>
           <li class="nav-item">
               <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse">
                   <i class="bi bi-grid"></i><span>Taxomoies</span><i class="bi bi-chevron-down ms-auto"></i>
@@ -58,7 +73,7 @@
                       </a>
                   </li>
               </ul>
-          </li><!-- End Tables Nav -->
+          </li>
           <li class="nav-item">
               <a class="nav-link collapsed" data-bs-target="#tax_nav" data-bs-toggle="collapse">
                   <i class="bi bi-grid"></i><span>Terms</span><i class="bi bi-chevron-down ms-auto"></i>
@@ -75,7 +90,7 @@
                       </a>
                   </li>
               </ul>
-          </li><!-- End Tables Nav -->
+          </li>
           @foreach ($types as $type)
               <li class="nav-item">
                   <a class="nav-link collapsed" data-bs-target="#{{ $type->name }}-{{ $type->id }}"
@@ -96,7 +111,7 @@
                           </a>
                       </li>
                   </ul>
-              </li><!-- End Forms Nav -->
+              </li>
           @endforeach
       </ul>
-  </aside><!-- End Sidebar-->
+  </aside>

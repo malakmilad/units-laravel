@@ -5,6 +5,8 @@ use App\Http\Controllers\Admin\MediaController;
 use App\Http\Controllers\Admin\TaxonomyController;
 use App\Http\Controllers\Admin\TermController;
 use App\Http\Controllers\Admin\TypeController;
+use App\Http\Controllers\ContactFormController;
+use App\Http\Controllers\FormController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SettingController;
 use App\Models\Media;
@@ -88,6 +90,20 @@ Route::middleware('auth')->group(function () {
             )
         );
     });
+    //?form
+    Route::get('form',[ContactFormController::class,'index'])->name('form.index');
+    Route::get('form/create',[ContactFormController::class,'create'])->name('form.create');
+    Route::post('form/store',[ContactFormController::class,'store'])->name('form.store');
+    Route::get('form/show/{contactForm}',[ContactFormController::class,'show'])->name('form.show');
+    Route::get('form/edit/{contactForm}',[ContactFormController::class,'edit'])->name('form.edit');
+    Route::get('form/getData',[ContactFormController::class,'getData'])->name('form.getData');
+    Route::put('form/update/{contactForm}',[ContactFormController::class,'update'])->name('form.update');
+    Route::get('form/destroy/{contactForm}',[ContactFormController::class,'destroy'])->name('form.destroy');
+    //?submission
+    Route::post('submit',[ContactFormController::class,'submit'])->name('form.submit');
+
+
+
 });
 
 require __DIR__.'/auth.php';
