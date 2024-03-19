@@ -1,12 +1,12 @@
-<x-mail::message>
+@component('mail::message')
 # Introduction
 
 The body of your message.
 
-<x-mail::button :url="''">
-Button Text
-</x-mail::button>
+User Name: {{ $submission->user->name }}
+
+Form Name: {{ $submission->contactForm->title }}
 
 Thanks,<br>
 {{ config('app.name') }}
-</x-mail::message>
+@endcomponent

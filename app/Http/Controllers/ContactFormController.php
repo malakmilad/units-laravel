@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ContactForm;
+use App\Events\AdminMailEvent;
 use App\Http\Requests\StoreContactFormRequest;
 use App\Http\Requests\UpdateContactFormRequest;
+use App\Mail\AdminMail;
+use App\Models\ContactForm;
 use App\Models\Submission;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class ContactFormController extends Controller
 {
@@ -15,8 +19,8 @@ class ContactFormController extends Controller
      */
     public function index()
     {
-        $forms=ContactForm::all();
-        return view('admin.form.index',compact('forms'));
+        $forms = ContactForm::all();
+        return view('admin.form.index', compact('forms'));
     }
 
     /**
@@ -33,9 +37,9 @@ class ContactFormController extends Controller
     public function store(StoreContactFormRequest $request)
     {
         ContactForm::create([
-            'title'=>$request->title,
-            'description'=>$request->description,
-            'content'=>$request->content
+            'title' => $request->title,
+            'description' => $request->description,
+            'content' => $request->content,
         ]);
         return response()->json('success');
     }
@@ -45,7 +49,7 @@ class ContactFormController extends Controller
      */
     public function show(ContactForm $contactForm)
     {
-        return view('admin.form.show',compact('contactForm'));
+        return view('admin.form.show', compact('contactForm'));
     }
 
     /**
@@ -53,7 +57,7 @@ class ContactFormController extends Controller
      */
     public function edit(ContactForm $contactForm)
     {
-        return view('admin.form.edit',compact('contactForm'));
+        return view('admin.form.edit', compact('contactForm'));
     }
     /**
      * Update the specified resource in storage.
@@ -61,9 +65,9 @@ class ContactFormController extends Controller
     public function update(UpdateContactFormRequest $request, ContactForm $contactForm)
     {
         $contactForm->update([
-            'title'=>$request->title,
-            'description'=>$request->description,
-            'content'=>$request->content
+            'title' => $request->title,
+            'description' => $request->description,
+            'content' => $request->content,
         ]);
         return response()->json('success');
     }
@@ -77,15 +81,18 @@ class ContactFormController extends Controller
         return redirect()->route('form.index')->with(['success' => 'Form Deleted Successfully']);
     }
 
-    public function getData(Request $request){
+    public function getData(Request $request)
+    {
         $data = ContactForm::findOrFail($request->id);
         return response()->json($data);
     }
-    public function submit(Request $request){
-        Submission::create([
-            'user_id'=>$request->user_id,
-            'form_id'=>$request->form_id,
-            'form' => $request->form
+    public function submit(Request $request)
+    {
+        $submission = Submission::create([
+            'user_id' => $request->user_id,
+            'form_id' => $request->form_id,
+            'form' => $request->form,
         ]);
+        event(new AdminMailEvent($submission));
     }
 }

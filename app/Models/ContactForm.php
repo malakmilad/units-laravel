@@ -12,7 +12,4 @@ class ContactForm extends Model
     protected $cast=[
         'content'=>'array'
     ];
-    public function users(){
-        return $this->hasMany(User::class);
-    }
 }

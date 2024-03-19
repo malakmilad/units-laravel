@@ -16,9 +16,11 @@ class AdminMail extends Mailable
     /**
      * Create a new message instance.
      */
-    public function __construct()
+    public $submission;
+
+    public function __construct($submission)
     {
-        //
+        $this->submission=$submission;
     }
 
     /**

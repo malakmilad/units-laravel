@@ -11,8 +11,9 @@ use Laravel\Sanctum\HasApiTokens;
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
-    public function forms(){
-        return $this->hasMany(ContactForm::class);
+    public function submissions()
+    {
+        return $this->hasMany(Submission::class);
     }
 
     /**

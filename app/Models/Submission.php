@@ -13,14 +13,13 @@ class Submission extends Model
     protected $casts = [
         'form' => 'array'
     ];
-
-    public function users()
+    public function user()
     {
-        return $this->belongsToMany(User::class);
+        return $this->belongsTo(User::class);
     }
 
     public function contactForm()
     {
-        return $this->belongsTo(ContactForm::class);
+        return $this->belongsTo(ContactForm::class, 'form_id');
     }
 }
