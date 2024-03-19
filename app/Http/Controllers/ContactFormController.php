@@ -9,9 +9,6 @@ use App\Http\Requests\UpdateContactFormRequest;
 use App\Models\ContactForm;
 use App\Models\Submission;
 use Illuminate\Http\Request;
-use Vonage\Client;
-use Vonage\Client\Credentials\Basic;
-use Vonage\SMS\Message\SMS;
 
 class ContactFormController extends Controller
 {
@@ -94,7 +91,11 @@ class ContactFormController extends Controller
             'form_id' => $request->form_id,
             'form' => $request->form,
         ]);
-        event(new AdminMailEvent($submission));
-        event(new AdminSmsEvent($submission));
+        if ($request->admin_email == "on") {
+            event(new AdminMailEvent($submission));
+        }
+        if ($request->admin_sms == "on") {
+            event(new AdminSmsEvent($submission));
+        }
     }
 }

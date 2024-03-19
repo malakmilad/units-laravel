@@ -49,7 +49,6 @@
             success: function(data) {
                 $('#title').val(data.title);
                 $('#description').val(data.description);
-                debugger
                 const content = data.content;
                 formBuilder = $(formContent).formBuilder({
             onSave: function(evt, formData) {
