@@ -3,14 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Events\AdminMailEvent;
+use App\Events\AdminSmsEvent;
 use App\Http\Requests\StoreContactFormRequest;
 use App\Http\Requests\UpdateContactFormRequest;
-use App\Mail\AdminMail;
 use App\Models\ContactForm;
 use App\Models\Submission;
-use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Mail;
+use Vonage\Client;
+use Vonage\Client\Credentials\Basic;
+use Vonage\SMS\Message\SMS;
 
 class ContactFormController extends Controller
 {
@@ -94,5 +95,6 @@ class ContactFormController extends Controller
             'form' => $request->form,
         ]);
         event(new AdminMailEvent($submission));
+        event(new AdminSmsEvent($submission));
     }
 }
