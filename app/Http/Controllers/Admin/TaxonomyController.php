@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
+
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreTaxonomyRequest;
 use App\Http\Requests\UpdateTaxonomyRequest;
@@ -18,7 +19,7 @@ class TaxonomyController extends Controller
      */
     public function index()
     {
-        $taxonomies = Taxonomy::with('media', 'type')->paginate(3);
+        $taxonomies = Taxonomy::with('media','types')->paginate(3);
         return view('admin.taxonomy.index', compact('taxonomies'));
     }
 
@@ -28,8 +29,7 @@ class TaxonomyController extends Controller
     public function create()
     {
         $types = Type::all();
-        $media = Media::all();
-        return view('admin.taxonomy.create', compact('types', 'media'));
+        return view('admin.taxonomy.create', compact('types'));
     }
 
     /**
@@ -37,14 +37,15 @@ class TaxonomyController extends Controller
      */
     public function store(StoreTaxonomyRequest $request)
     {
-        $media=Media::where("full-path",$request->url)->get()->toArray();
-        Taxonomy::create([
+        $types = $request->type_id;
+        $media = Media::where("full-path", $request->url)->get()->toArray();
+        $taxonomy = Taxonomy::create([
             'title' => $request->title,
             'slug' => $request->slug,
             'body' => $request->body,
             'media_id' => $media[0]['id'],
-            'type_id' => $request->type_id,
         ]);
+        $taxonomy->types()->attach($types);
         return redirect()->route('taxonomies.index')->with(['success' => 'Taxonomy Created Successfully']);
 
     }

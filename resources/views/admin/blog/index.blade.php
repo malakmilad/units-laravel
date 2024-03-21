@@ -54,7 +54,7 @@
                                 @endforeach
                             </td>
                             <td><img width="150" height="100"
-                                    src="{{ asset('FeaturedMedia' . '/' . $blog->media->featured_image) }}" alt="">
+                                    src="{{ asset($blog->media->path . '/' . $blog->media->featured_image) }}" alt="">
                             </td>
                             <td>
                                 <a class="show-blog-btn" data-toggle="modal" data-target="#showBlogCard"
@@ -67,9 +67,6 @@
                                 </a>
                                 <a href="{{ route('blog.destroy', Hashids::encode($blog->id)) }}"><i
                                         class="bi bi-trash"></i></a>
-                                {{-- <a class="toggle-edit-btn" id="edit_category_btn">
-                                    <i class="bi bi-list "></i>
-                                </a> --}}
                             </td>
                         </tr>
                     @endforeach
@@ -77,9 +74,6 @@
             </table>
         </div>
     </div>
-    {{-- <aside id="edit_category_form" class="edit">
-        <button type="button" class="btn-close close_edit_category"></button>
-    </aside> --}}
     <!-- End Basic Modal-->
     <div class="modal fade" id="editBlogForm" tabindex="-1" style="display: none;" aria-hidden="true">
         <div class="modal-dialog">

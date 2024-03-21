@@ -13,6 +13,8 @@ use Illuminate\Http\Request;
 use Vinkla\Hashids\Facades\Hashids;
 use App\Http\Controllers\Controller;
 
+use function PHPSTORM_META\type;
+
 class BlogController extends Controller
 {
     /**
@@ -20,9 +22,14 @@ class BlogController extends Controller
      */
     public function index($type)
     {
-        $selectedType = Type::find($type);
-        $blogs = Blog::with('media', 'taxonomies')->where('type_id',$type)->paginate(3);
-        return view('admin.blog.index', compact('blogs','selectedType'));
+        $type = Type::findOrFail($type);
+        // $blogs = $type->blogs()->with('media', 'taxonomies')->paginate(3);
+        //?another solution
+        $blogs = Blog::join('blog_type', 'blogs.id', '=', 'blog_type.blog_id')
+                ->where('blog_type.type_id', $type->id)
+                ->with('media', 'taxonomies')
+                ->paginate(3);
+        return view('admin.blog.index', compact('blogs'));
     }
 
     /**
@@ -42,14 +49,16 @@ class BlogController extends Controller
     public function store(StoreBlogRequest $request)
     {
         $taxonomies = $request->taxonomy_id;
+        $types=$request->type_id;
+        $media = Media::where("full-path", $request->url)->get()->toArray();
         $blog = Blog::create([
             'title' => $request->title,
             'slug' => $request->slug,
             'body' => $request->body,
-            'media_id' => $request->media_id,
-            'type_id' => $request->type_id,
+            'media_id' =>  $media[0]['id'],
         ]);
         $blog->taxonomies()->attach($taxonomies);
+        $blog->types()->attach($types);
         return redirect()->route('blogs.index', ['type' => $request->type_id])->with(['success' => 'Blogs Created Successfully']);
     }
     /**

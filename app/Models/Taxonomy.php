@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 class Taxonomy extends Model
 {
     use HasFactory,Sluggable;
-    protected $fillable = ['title', 'slug', 'body', 'media_id', 'type_id'];
+    protected $fillable = ['title', 'slug', 'body', 'media_id'];
     public function sluggable(): array
     {
         return [
@@ -26,8 +26,8 @@ class Taxonomy extends Model
     {
         return $this->belongsTo(Media::class);
     }
-    public function type()
+    public function types()
     {
-        return $this->belongsTo(Type::class);
+        return $this->belongsToMany(Type::class);
     }
 }

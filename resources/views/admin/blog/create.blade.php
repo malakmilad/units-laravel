@@ -92,11 +92,7 @@
                         <h5 class="card-title">Featured Image</h5>
                         <div class="row mb-3">
                             <div class="col-sm-10">
-                                <select class="form-select" aria-label="Default select example" name="media_id">
-                                    @foreach ($media as $image)
-                                        <option value="{{ $image->id }}">{{ $image->id }}</option>
-                                    @endforeach
-                                </select>
+                                @include('admin.file.index')
                             </div>
                         </div>
                     </div>

@@ -8,9 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class Type extends Model
 {
     use HasFactory;
-    protected $fillable=['name'];
-    public function taxonomy()
+    protected $fillable = ['name'];
+    public function blogs()
     {
-        return $this->hasOne(Taxonomy::class);
+        return $this->belongsToMany(Blog::class);
+    }
+    public function taxonomies()
+    {
+        return $this->belongsToMany(Taxonomy::class);
     }
 }

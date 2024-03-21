@@ -11,13 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('taxonomies', function (Blueprint $table) {
+        Schema::create('blog_type', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('media_id')->nullable();
-            $table->foreign('media_id')->references('id')->on('media')->onDelete('cascade');
-            $table->string('title');
-            $table->string('slug');
-            $table->text('body');
+            $table->unsignedBiginteger('blog_id');
+            $table->unsignedBiginteger('type_id');
+            $table->foreign('blog_id')->references('id')
+                ->on('blogs')->onDelete('cascade');
+            $table->foreign('type_id')->references('id')
+            ->on('types')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -27,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('taxonomies');
+        Schema::dropIfExists('type_blog');
     }
 };

@@ -25,7 +25,6 @@ class UpdateBlogRequest extends FormRequest
             'title'=>'required',
             'slug'=>['required','alpha_dash','unique:blogs,slug,except,id'],
             'body'=>'required',
-            'media_id'=>'integer',
             'type_id'=>'integer'
         ];
     }

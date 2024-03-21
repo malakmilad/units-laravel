@@ -22,7 +22,6 @@ class StoreTermRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'media_id'=>'required|integer',
             'taxonomy_id'=>'required|integer',
             'title'=>'required',
             'slug'=>'required|unique:terms,slug,except,id',

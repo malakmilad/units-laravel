@@ -46,20 +46,27 @@
                             <td>{{ $taxonomy->title }}</td>
                             <td>{{ $taxonomy->slug }}</td>
                             <td>{{ $taxonomy->body }}</td>
-                            <td>{{ $taxonomy->type->name }}</td>
-                            {{-- <td><img width="150" height="100"
-                                    src="{{ asset('FeaturedMedia' . '/' . $taxonomy->media->featured_image) }}"></td>
-                            <td> --}}
-                                <a class="show-tax-btn" data-toggle="modal" data-target="#showTaxCard"
-                                    data-id="{{ Hashids::encode($taxonomy->id) }}" style="cursor: pointer">
-                                    <i class="bi bi-eye-fill"></i>
-                                </a>
-                                <a class="edit-tax-btn" data-toggle="modal" data-target="#editTaxForm"
-                                    data-id="{{ Hashids::encode($taxonomy->id) }}" style="cursor: pointer">
-                                    <i class="bi bi-pen"></i>
-                                </a>
-                                <a href="{{ route('taxonomy.destroy', Hashids::encode($taxonomy->id)) }}"><i
-                                        class="bi bi-trash"></i></a>
+                            <td>
+                                @php
+                                    $types = $taxonomy->types;
+                                @endphp
+                                @foreach ($types as $type)
+                                    {{ $type->name }},
+                                @endforeach
+                            </td>
+                            <td><img width="150" height="100"
+                                    src="{{ asset($taxonomy->media->path . '/' . $taxonomy->media->featured_image) }}"></td>
+                            <td>
+                            <a class="show-tax-btn" data-toggle="modal" data-target="#showTaxCard"
+                                data-id="{{ Hashids::encode($taxonomy->id) }}" style="cursor: pointer">
+                                <i class="bi bi-eye-fill"></i>
+                            </a>
+                            <a class="edit-tax-btn" data-toggle="modal" data-target="#editTaxForm"
+                                data-id="{{ Hashids::encode($taxonomy->id) }}" style="cursor: pointer">
+                                <i class="bi bi-pen"></i>
+                            </a>
+                            <a href="{{ route('taxonomy.destroy', Hashids::encode($taxonomy->id)) }}"><i
+                                    class="bi bi-trash"></i></a>
                             </td>
                         </tr>
                     @endforeach

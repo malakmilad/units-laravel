@@ -37,8 +37,9 @@ class TermController extends Controller
      */
     public function store(StoreTermRequest $request)
     {
+        $media = Media::where("full-path", $request->url)->get()->toArray();
         Term::create([
-            'media_id' => $request->media_id,
+            'media_id' => $media[0]['id'],
             'taxonomy_id' => $request->taxonomy_id,
             'title' => $request->title,
             'slug' => $request->slug,

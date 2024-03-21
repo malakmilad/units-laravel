@@ -72,31 +72,21 @@
                     <div class="card-body">
                         <h5 class="card-title">Types</h5>
                         <div class="row mb-3">
-                            <div class="col-sm-10 d-flex">
-                                <select class="form-select" aria-label="Default select example" name="type_id">
-                                    @foreach ($types as $type)
-                                        <option value="{{ $type->id }}">{{ $type->name }}</option>
-                                    @endforeach
-                                </select>
+                            <div class="col-sm-10">
+                                @foreach ($types as $type)
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="gridCheck1" name="type_id[]"
+                                        value="{{ $type->id }}">
+                                    <label class="form-check-label" for="gridCheck1">
+                                        {{ $type->name }}
+                                    </label>
+                                </div>
+                            @endforeach
                             </div>
                         </div>
                     </div>
                 </div>
                 @include('admin.file.index')
-                {{-- <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Featured Image</h5>
-                        <div class="row mb-3">
-                            <div class="col-sm-10 d-flex">
-                                <select class="form-select" aria-label="Default select example" name="media_id">
-                                    @foreach ($media as $image)
-                                        <option value="{{ $image->id }}">{{ $image->id }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </div> --}}
             </div>
         </div>
     </form>

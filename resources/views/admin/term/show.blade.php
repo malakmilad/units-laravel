@@ -3,5 +3,5 @@
         <h5 class="card-title">{{ $term->title }}</h5>
         <p class="card-text">{{ $term->body }}</p>
     </div>
-    <img src="{{ asset('FeaturedMedia' . '/' . $term->media->featured_image) }}" height="450">
+    <img src="{{ asset($term->media->path . '/' . $term->media->featured_image) }}" height="450">
 </div>

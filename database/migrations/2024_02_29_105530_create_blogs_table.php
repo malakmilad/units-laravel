@@ -15,8 +15,6 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('media_id')->nullable();
             $table->foreign('media_id')->references('id')->on('media')->onDelete('cascade');
-            $table->unsignedBigInteger('type_id')->nullable();
-            $table->foreign('type_id')->references('id')->on('types')->onDelete('cascade');
             $table->string('title');
             $table->string('slug');
             $table->text('body');

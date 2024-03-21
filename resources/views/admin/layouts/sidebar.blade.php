@@ -13,16 +13,16 @@
                   <span>Setting</span>
               </a>
           </li>
-          <li class="nav-item">
+          {{-- <li class="nav-item">
               <a class="nav-link" href="{{ route('media.index') }}">
                   <i class="bi bi-card-image"></i><span>Media</span>
               </a>
-          </li>
-          <li class="nav-item">
+          </li> --}}
+          {{-- <li class="nav-item">
               <a class="nav-link" href="{{ route('media.file') }}">
                   <i class="bi bi-card-image"></i><span>File</span>
               </a>
-          </li>
+          </li> --}}
           <li class="nav-item">
             <a class="nav-link collapsed" data-bs-target="#form_tab" data-bs-toggle="collapse">
                 <i class="bi bi-hash"></i><span>Forms</span><i class="bi bi-chevron-down ms-auto"></i>
