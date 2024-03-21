@@ -22,6 +22,17 @@
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     @endif
+    <form action="{{ route('taxonomy.search') }}" method="GET">
+        <input type="text" name="search" placeholder="Search...">
+        <select name="sort_by">
+            <option value="title">title</option>
+        </select>
+        <select name="sort_order">
+            <option value="asc">Asc</option>
+            <option value="desc">Desc</option>
+        </select>
+        <button type="submit">Search</button>
+    </form>
     <div class="d-flex justify-content-center" id="pagination-links">
         {{ $taxonomies->links() }}
     </div>
@@ -57,16 +68,16 @@
                             <td><img width="150" height="100"
                                     src="{{ asset($taxonomy->media->path . '/' . $taxonomy->media->featured_image) }}"></td>
                             <td>
-                            <a class="show-tax-btn" data-toggle="modal" data-target="#showTaxCard"
-                                data-id="{{ Hashids::encode($taxonomy->id) }}" style="cursor: pointer">
-                                <i class="bi bi-eye-fill"></i>
-                            </a>
-                            <a class="edit-tax-btn" data-toggle="modal" data-target="#editTaxForm"
-                                data-id="{{ Hashids::encode($taxonomy->id) }}" style="cursor: pointer">
-                                <i class="bi bi-pen"></i>
-                            </a>
-                            <a href="{{ route('taxonomy.destroy', Hashids::encode($taxonomy->id)) }}"><i
-                                    class="bi bi-trash"></i></a>
+                                <a class="show-tax-btn" data-toggle="modal" data-target="#showTaxCard"
+                                    data-id="{{ Hashids::encode($taxonomy->id) }}" style="cursor: pointer">
+                                    <i class="bi bi-eye-fill"></i>
+                                </a>
+                                <a class="edit-tax-btn" data-toggle="modal" data-target="#editTaxForm"
+                                    data-id="{{ Hashids::encode($taxonomy->id) }}" style="cursor: pointer">
+                                    <i class="bi bi-pen"></i>
+                                </a>
+                                <a href="{{ route('taxonomy.destroy', Hashids::encode($taxonomy->id)) }}"><i
+                                        class="bi bi-trash"></i></a>
                             </td>
                         </tr>
                     @endforeach

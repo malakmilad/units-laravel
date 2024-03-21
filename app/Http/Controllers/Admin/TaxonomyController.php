@@ -10,6 +10,7 @@ use App\Models\Taxonomy;
 use App\Models\Type;
 use Cviebrock\EloquentSluggable\Services\SlugService;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\Paginator;
 use Vinkla\Hashids\Facades\Hashids;
 
 class TaxonomyController extends Controller
@@ -109,5 +110,22 @@ class TaxonomyController extends Controller
     {
         $slug = SlugService::createSlug(Taxonomy::class, 'slug', $request->title);
         return response()->json(['slug' => $slug]);
+    }
+    public function search(Request $request){
+        $query = Taxonomy::query();
+        // Search functionality
+        if ($request->has('search')) {
+            $searchTerm = $request->input('search');
+            $query->where('title', 'like', '%' . $searchTerm . '%');
+        }
+        // Sorting functionality
+        if ($request->has('sort_by') && $request->has('sort_order')) {
+            $sortBy = $request->input('sort_by');
+            $sortOrder = $request->input('sort_order');
+            $query->orderBy($sortBy, $sortOrder);
+        }
+        // Pagination
+        $taxonomies = $query->paginate(3)->withQueryString();
+        return view('admin.taxonomy.index', compact('taxonomies'));
     }
 }

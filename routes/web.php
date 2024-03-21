@@ -61,6 +61,8 @@ Route::middleware('auth')->group(function () {
     Route::put('/taxonomy/update/{taxonomy}',[TaxonomyController::class,'update'])->name('taxonomy.update');
     Route::get('/taxonomy/destroy/{taxonomy}',[TaxonomyController::class,'destroy'])->name('taxonomy.destroy');
     Route::get('/taxonomy/slug',[TaxonomyController::class,'slug'])->name('taxonomy.slug');
+    Route::get('/taxonomy/search',[TaxonomyController::class,'search'])->name('taxonomy.search');
+
     //?type
     Route::get('/types',[TypeController::class,'index'])->name('types.index');
     Route::get('/type/create',[TypeController::class,'create'])->name('type.create');
