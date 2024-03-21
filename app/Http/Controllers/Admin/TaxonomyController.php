@@ -18,7 +18,7 @@ class TaxonomyController extends Controller
      */
     public function index()
     {
-        $taxonomies = Taxonomy::with('media', 'type')->get();
+        $taxonomies = Taxonomy::with('media', 'type')->paginate(3);
         return view('admin.taxonomy.index', compact('taxonomies'));
     }
 

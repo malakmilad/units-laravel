@@ -18,7 +18,7 @@ class TermController extends Controller
      */
     public function index()
     {
-        $terms = Term::with('media', 'taxonomy')->get();
+        $terms = Term::with('media', 'taxonomy')->paginate(3);
         return view('admin.term.index', compact('terms'));
     }
 

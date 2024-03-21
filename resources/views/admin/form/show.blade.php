@@ -11,14 +11,6 @@
                 <input type="hidden" name="form_id" id="form_id">
                 <input type="hidden" name="user_id" id="user_id" value="{{ Auth::user()->id }}">
                 <div id="fb-render"></div>
-                <div class="form-check form-switch">
-                    <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" name="admin_email">
-                    <label class="form-check-label" for="flexSwitchCheckDefault">Send email to Admin</label>
-                </div>
-                <div class="form-check form-switch">
-                    <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" name="admin_sms">
-                    <label class="form-check-label" for="flexSwitchCheckChecked">Send Sms to Admin</label>
-                </div>
                 <input type="submit" value="save" class="btn btn-success" id="btn-submit">
             </form>
         </div>
@@ -64,10 +56,6 @@
                         formId = item.value;
                     } else if (item.name == 'user_id') {
                         userId = item.value;
-                    } else if (item.name == "admin_email") {
-                        adminEmail = item.value;
-                    } else if (item.name == "admin_sms") {
-                        adminSms = item.value;
                     } else {
                         Data[item.name] = item.value;
                     }
@@ -78,8 +66,6 @@
                     data: {
                         'form_id': formId,
                         'user_id': userId,
-                        'admin_email': adminEmail,
-                        'admin_sms': adminSms,
                         'form': Data,
                         "_token": "{{ csrf_token() }}"
                     },

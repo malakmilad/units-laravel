@@ -23,6 +23,6 @@ class AdminMailListener
      */
     public function handle(AdminMailEvent $event): void
     {
-        Mail::to('malakmilad202@gmail.com')->send(new AdminMail($event->submission));
+        Mail::to($event->submission->contactForm->email)->send(new AdminMail($event->submission));
     }
 }

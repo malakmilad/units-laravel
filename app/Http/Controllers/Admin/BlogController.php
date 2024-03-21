@@ -21,7 +21,7 @@ class BlogController extends Controller
     public function index($type)
     {
         $selectedType = Type::find($type);
-        $blogs = Blog::with('media', 'taxonomies')->where('type_id',$type)->get();
+        $blogs = Blog::with('media', 'taxonomies')->where('type_id',$type)->paginate(3);
         return view('admin.blog.index', compact('blogs','selectedType'));
     }
 

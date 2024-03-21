@@ -16,6 +16,8 @@ return new class extends Migration
             $table->string('title');
             $table->text('description');
             $table->json('content');
+            $table->string('email');
+            $table->string('phone');
             $table->timestamps();
         });
     }

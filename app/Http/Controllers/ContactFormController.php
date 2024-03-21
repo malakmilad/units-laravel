@@ -17,7 +17,7 @@ class ContactFormController extends Controller
      */
     public function index()
     {
-        $forms = ContactForm::all();
+        $forms = ContactForm::paginate(3);
         return view('admin.form.index', compact('forms'));
     }
 
@@ -38,6 +38,8 @@ class ContactFormController extends Controller
             'title' => $request->title,
             'description' => $request->description,
             'content' => $request->content,
+            'email' => $request->email ? $request->email : '',
+            'phone' => $request->phone ? $request->phone : '',
         ]);
         return response()->json('success');
     }
@@ -66,6 +68,8 @@ class ContactFormController extends Controller
             'title' => $request->title,
             'description' => $request->description,
             'content' => $request->content,
+            'email' => $request->email ? $request->email : '',
+            'phone' => $request->phone ? $request->phone : '',
         ]);
         return response()->json('success');
     }
@@ -91,10 +95,13 @@ class ContactFormController extends Controller
             'form_id' => $request->form_id,
             'form' => $request->form,
         ]);
-        if ($request->admin_email == "on") {
+        //?realtion
+        $email = $submission->contactForm->email;
+        if($email){
             event(new AdminMailEvent($submission));
         }
-        if ($request->admin_sms == "on") {
+        $sms=$submission->contactForm->phone;
+        if($sms){
             event(new AdminSmsEvent($submission));
         }
     }

@@ -10,6 +10,9 @@
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     @endif
+    <div class="d-flex justify-content-center" id="pagination-links">
+        {{ $forms->links() }}
+    </div>
     <div class="card">
         <div class="card-body p-0">
             <table class="table">
