@@ -22,52 +22,36 @@
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     @endif
-    <form action="{{ route('taxonomy.search') }}" method="GET">
-        <input type="text" name="search" placeholder="Search...">
-        <select name="sort_by">
-            <option value="title">title</option>
-        </select>
-        <select name="sort_order">
-            <option value="asc">Asc</option>
-            <option value="desc">Desc</option>
-        </select>
-        <button type="submit">Search</button>
-    </form>
-    <div class="d-flex justify-content-center" id="pagination-links">
-        {{ $taxonomies->links() }}
-    </div>
     <div class="card">
         <div class="card-body p-0">
-            <table class="table">
+            <table id="tax" class="display" style="width:100%">
                 <thead>
                     <tr>
-                        <th style="width: 10px">id</th>
+                        <th>Id</th>
                         <th>Title</th>
                         <th>Slug</th>
                         <th>Body</th>
-                        <th>Type</th>
-                        <th>Image</th>
+                        <th>Created At</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($taxonomies as $taxonomy)
+                    {{-- @foreach ($taxonomies as $taxonomy)
                         <tr>
-                            <td>{{ $taxonomy->id }}</td>
-                            <td>{{ $taxonomy->title }}</td>
-                            <td>{{ $taxonomy->slug }}</td>
-                            <td>{{ $taxonomy->body }}</td>
-                            <td>
+                            <th>{{ $taxonomy->id }}</th>
+                            <th>{{ $taxonomy->title }}</th>
+                            <th>{{ $taxonomy->slug }}</th>
+                            <th>{{ $taxonomy->body }}</th>
+                            <th>
                                 @php
                                     $types = $taxonomy->types;
                                 @endphp
                                 @foreach ($types as $type)
                                     {{ $type->name }},
                                 @endforeach
-                            </td>
-                            <td><img width="150" height="100"
-                                    src="{{ asset($taxonomy->media->path . '/' . $taxonomy->media->featured_image) }}"></td>
-                            <td>
+                            </th>
+                            <th>{{ $taxonomy->created_at }}</th>
+                            <th>
                                 <a class="show-tax-btn" data-toggle="modal" data-target="#showTaxCard"
                                     data-id="{{ Hashids::encode($taxonomy->id) }}" style="cursor: pointer">
                                     <i class="bi bi-eye-fill"></i>
@@ -78,9 +62,9 @@
                                 </a>
                                 <a href="{{ route('taxonomy.destroy', Hashids::encode($taxonomy->id)) }}"><i
                                         class="bi bi-trash"></i></a>
-                            </td>
+                            </th>
                         </tr>
-                    @endforeach
+                    @endforeach --}}
                 </tbody>
             </table>
         </div>
@@ -115,6 +99,65 @@
     <!-- End Basic Modal-->
 @endsection
 @section('script')
+    <script>
+        $(document).ready(function() {
+            $('#tax').DataTable({
+                "lengthMenu": [
+                    [10, 15, 20],
+                    [10, 15, 20]
+                ],
+                "processing": true,
+                "serverSide": true,
+                "ajax": {
+                    "url": "{{ route('taxonomy.filter') }}",
+                    "type": "GET"
+                },
+                "columns": [{
+                        "data": "id",
+                        "name": "id",
+                        "searchable": false
+                    },
+                    {
+                        "data": "title",
+                        "name": "title",
+                        "searchable": true
+                    },
+                    {
+                        "data": "slug",
+                        "name": "slug",
+                        "searchable": true
+
+                    },
+                    {
+                        "data": "body",
+                        "name": "body",
+                        "searchable": false
+                    },
+                    {
+                        "data": "created_at",
+                        "name": "created_at",
+                        "searchable": false
+                    },
+                    {
+                        "render": function(data, type, row) {
+                            let showButton =
+                                '<a class="show-tax-btn" data-toggle="modal" data-target="#showTaxCard" data-id="' +
+                                row.id +
+                                '" style="cursor: pointer"><i class="bi bi-eye-fill"></i></a>';
+                            let editButton =
+                                '<a class="edit-tax-btn" data-toggle="modal" data-target="#editTaxForm" data-id="' +
+                                row.id +
+                                '" style="cursor: pointer"><i class="bi bi-pen"></i></a>';
+                            let deleteButton = '<a href="/taxonomy/destroy/' + row.id +
+                                '"><i class="bi bi-trash"></i></a>';
+                            return showButton + editButton + deleteButton;
+                        }
+
+                    }
+                ]
+            });
+        });
+    </script>
     <script src="{{ asset('assets/js/taxonomy/edit.js') }}"></script>
     <script src="{{ asset('assets/js/taxonomy/show.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>

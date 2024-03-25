@@ -10,8 +10,7 @@ use App\Models\Taxonomy;
 use App\Models\Type;
 use Cviebrock\EloquentSluggable\Services\SlugService;
 use Illuminate\Http\Request;
-use Illuminate\Pagination\Paginator;
-use Vinkla\Hashids\Facades\Hashids;
+use Illuminate\Support\Facades\Hash;
 
 class TaxonomyController extends Controller
 {
@@ -20,7 +19,7 @@ class TaxonomyController extends Controller
      */
     public function index()
     {
-        $taxonomies = Taxonomy::with('media','types')->paginate(3);
+        $taxonomies = Taxonomy::with('media', 'types')->get();
         return view('admin.taxonomy.index', compact('taxonomies'));
     }
 
@@ -57,8 +56,8 @@ class TaxonomyController extends Controller
     public function show($encryptedId)
     {
         // $id = decrypt($encryptedId);
-        $id = Hashids::decode($encryptedId)[0];
-        $taxonomy = Taxonomy::findOrFail($id);
+        // $id = Hashids::decode($encryptedId)[0];
+        $taxonomy = Taxonomy::findOrFail($encryptedId);
         return view('admin.taxonomy.show', compact('taxonomy'));
     }
 
@@ -69,8 +68,8 @@ class TaxonomyController extends Controller
     {
 
         // $id = decrypt($encryptedId);
-        $id = Hashids::decode($encryptedId)[0];
-        $taxonomy = Taxonomy::findOrFail($id);
+        // $id = Hashids::decode($encryptedId)[0];
+        $taxonomy = Taxonomy::findOrFail($encryptedId);
         $types = Type::all();
         $media = Media::all();
         return view('admin.taxonomy.edit', compact('taxonomy', 'types', 'media'));
@@ -82,8 +81,8 @@ class TaxonomyController extends Controller
     public function update(UpdateTaxonomyRequest $request, $encryptedId)
     {
         // $id = decrypt($encryptedId);
-        $id = Hashids::decode($encryptedId)[0];
-        $taxonomy = Taxonomy::findOrFail($id);
+        // $id = Hashids::decode($encryptedId)[0];
+        $taxonomy = Taxonomy::findOrFail($encryptedId);
         $taxonomy->update([
             'title' => $request->title,
             'slug' => $request->slug,
@@ -101,8 +100,8 @@ class TaxonomyController extends Controller
     public function destroy($encryptedId)
     {
         // $id = decrypt($encryptedId);
-        $id = Hashids::decode($encryptedId)[0];
-        $taxonomy = Taxonomy::findOrFail($id);
+        // $id = Hashids::decode($encryptedId)[0];
+        $taxonomy = Taxonomy::findOrFail($encryptedId);
         $taxonomy->delete();
         return redirect()->route('taxonomies.index')->with(['success' => 'Taxonomy Deleted Successfully']);
     }
@@ -111,21 +110,46 @@ class TaxonomyController extends Controller
         $slug = SlugService::createSlug(Taxonomy::class, 'slug', $request->title);
         return response()->json(['slug' => $slug]);
     }
-    public function search(Request $request){
+    // public function search(Request $request)
+    // {
+    //     $query = Taxonomy::query();
+    //     // Search functionality
+    //     if ($request->has('search')) {
+    //         $searchTerm = $request->input('search');
+    //         $query->where('title', 'like', '%' . $searchTerm . '%');
+    //     }
+    //     // Sorting functionality
+    //     if ($request->has('sort_by') && $request->has('sort_order')) {
+    //         $sortBy = $request->input('sort_by');
+    //         $sortOrder = $request->input('sort_order');
+    //         $query->orderBy($sortBy, $sortOrder);
+    //     }
+    //     // Pagination
+    //     $taxonomies = $query->paginate(3)->withQueryString();
+    //     return view('admin.taxonomy.index', compact('taxonomies'));
+    // }
+    public function filter(Request $request)
+    {
         $query = Taxonomy::query();
-        // Search functionality
-        if ($request->has('search')) {
-            $searchTerm = $request->input('search');
-            $query->where('title', 'like', '%' . $searchTerm . '%');
+        $search = $request->input('search.value');
+        $orderDir = $request->input('order.0.dir');
+        $orderName = $request->input('order.0.name');
+        $perPage = $request->input('length');
+        $start = $request->input('start');
+        $page = ($start / $perPage) + 1;
+        $query->paginate($perPage, ['*'], 'page', $page);
+        if ($orderDir && $orderName) {
+            $query->orderBy($orderName, $orderDir);
         }
-        // Sorting functionality
-        if ($request->has('sort_by') && $request->has('sort_order')) {
-            $sortBy = $request->input('sort_by');
-            $sortOrder = $request->input('sort_order');
-            $query->orderBy($sortBy, $sortOrder);
+        if ($search) {
+            $query->where('title', 'like', '%' . $search . '%')
+                ->orWhere('slug', 'like', '%' . $search . '%');
         }
-        // Pagination
-        $taxonomies = $query->paginate(3)->withQueryString();
-        return view('admin.taxonomy.index', compact('taxonomies'));
+        $result = $query->get();
+        $data = [
+            'data' => $result,
+        ];
+        return response()->json($data);
     }
+
 }

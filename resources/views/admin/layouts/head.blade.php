@@ -32,4 +32,6 @@
 <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet">
 <link rel="stylesheet" href="{{ asset('assets/css/loader.css') }}">
 <link rel="stylesheet" href="{{ asset('assets/css/file.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/css/datatables.min.css') }}">
+
 @yield('css')

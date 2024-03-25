@@ -1,6 +1,6 @@
 $(document).ready(function () {
     let loader = $(".overlay");
-    $('.edit-tax-btn').click(function () {
+    $('#tax').on('click', '.edit-tax-btn', function () {
         let taxID = $(this).data('id');
         loader.show();
         $.ajax({
