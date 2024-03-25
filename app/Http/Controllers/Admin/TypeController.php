@@ -5,6 +5,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreTypeRequest;
 use App\Http\Requests\UpdateTypeRequest;
 use App\Models\Type;
+use Illuminate\Http\Request;
 use Vinkla\Hashids\Facades\Hashids;
 
 class TypeController extends Controller
@@ -14,7 +15,7 @@ class TypeController extends Controller
      */
     public function index()
     {
-        $types = Type::paginate(3);
+        $types = Type::get();
         return view('admin.type.index', compact('types'));
     }
 
@@ -84,5 +85,27 @@ class TypeController extends Controller
         $type = Type::findOrFail($id);
         $type->delete();
         return redirect()->route('types.index')->with(['success' => 'Type Deleted Successfully']);
+    }
+    public function filter(Request $request)
+    {
+        $query = Type::query();
+        $search = $request->input('search.value');
+        $orderDir = $request->input('order.0.dir');
+        $orderName = $request->input('order.0.name');
+        $perPage = $request->input('length');
+        $start = $request->input('start');
+        $page = ($start / $perPage) + 1;
+        $query->paginate($perPage, ['*'], 'page', $page);
+        if ($orderDir && $orderName) {
+            $query->orderBy($orderName, $orderDir);
+        }
+        if ($search) {
+            $query->where('name', 'like', '%' . $search . '%');
+        }
+        $result = $query->get();
+        $data = [
+            'data' => $result,
+        ];
+        return response()->json($data);
     }
 }

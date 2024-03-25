@@ -45,6 +45,8 @@ Route::middleware('auth')->group(function () {
     Route::put('/blog/update/{blog}',[BlogController::class,'update'])->name('blog.update');
     Route::get('/blog/destroy/{blog}',[BlogController::class,'destroy'])->name('blog.destroy');
     Route::get('/blog/slug',[BlogController::class,'slug'])->name('blog.slug');
+    Route::get('/blog/filter',[BlogController::class,'filter'])->name('blog.filter');
+
     //?media
     Route::get('/media',[MediaController::class,'index'])->name('media.index');
     Route::post('/media/store',[MediaController::class,'store'])->name('media.store');
@@ -63,8 +65,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/taxonomy/slug',[TaxonomyController::class,'slug'])->name('taxonomy.slug');
     Route::get('/taxonomy/search',[TaxonomyController::class,'search'])->name('taxonomy.search');
     Route::get('/taxonomy/filter',[TaxonomyController::class,'filter'])->name('taxonomy.filter');
-
-
     //?type
     Route::get('/types',[TypeController::class,'index'])->name('types.index');
     Route::get('/type/create',[TypeController::class,'create'])->name('type.create');
@@ -73,6 +73,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/type/edit/{type}',[TypeController::class,'edit'])->name('type.edit');
     Route::put('/type/update/{type}',[TypeController::class,'update'])->name('type.update');
     Route::get('/type/destroy/{type}',[TypeController::class,'destroy'])->name('type.destroy');
+    Route::get('/type/filter',[TypeController::class,'filter'])->name('type.filter');
     //?term
     Route::get('/terms',[TermController::class,'index'])->name('terms.index');
     Route::get('/term/create',[TermController::class,'create'])->name('term.create');
@@ -82,6 +83,8 @@ Route::middleware('auth')->group(function () {
     Route::put('/term/update/{term}',[TermController::class,'update'])->name('term.update');
     Route::get('/term/destroy/{term}',[TermController::class,'destroy'])->name('term.destroy');
     Route::get('/term/slug',[TermController::class,'slug'])->name('term.slug');
+    Route::get('/term/filter',[TermController::class,'filter'])->name('term.filter');
+
     //?setting
     Route::get('/setting/edit',[SettingController::class,'edit'])->name('setting.edit');
     Route::put('/setting/update',[SettingController::class,'update'])->name('setting.update');
@@ -103,11 +106,9 @@ Route::middleware('auth')->group(function () {
     Route::get('form/getData',[ContactFormController::class,'getData'])->name('form.getData');
     Route::put('form/update/{contactForm}',[ContactFormController::class,'update'])->name('form.update');
     Route::get('form/destroy/{contactForm}',[ContactFormController::class,'destroy'])->name('form.destroy');
+    Route::get('form/filter',[ContactFormController::class,'filter'])->name('form.filter');
     //?submission
     Route::post('submit',[ContactFormController::class,'submit'])->name('form.submit');
-
-
-
 });
 
 require __DIR__.'/auth.php';

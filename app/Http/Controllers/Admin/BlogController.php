@@ -118,4 +118,27 @@ class BlogController extends Controller
         $slug = SlugService::createSlug(Blog::class, 'slug', $request->title);
         return response()->json(['slug' => $slug]);
     }
+    public function filter(Request $request)
+    {
+        $query = Blog::query();
+        $search = $request->input('search.value');
+        $orderDir = $request->input('order.0.dir');
+        $orderName = $request->input('order.0.name');
+        $perPage = $request->input('length');
+        $start = $request->input('start');
+        $page = ($start / $perPage) + 1;
+        $query->paginate($perPage, ['*'], 'page', $page);
+        if ($orderDir && $orderName) {
+            $query->orderBy($orderName, $orderDir);
+        }
+        if ($search) {
+            $query->where('title', 'like', '%' . $search . '%')
+                ->orWhere('slug', 'like', '%' . $search . '%');
+        }
+        $result = $query->get();
+        $data = [
+            'data' => $result,
+        ];
+        return response()->json($data);
+    }
 }

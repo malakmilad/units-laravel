@@ -17,7 +17,7 @@ class ContactFormController extends Controller
      */
     public function index()
     {
-        $forms = ContactForm::paginate(3);
+        $forms = ContactForm::get();
         return view('admin.form.index', compact('forms'));
     }
 
@@ -95,7 +95,6 @@ class ContactFormController extends Controller
             'form_id' => $request->form_id,
             'form' => $request->form,
         ]);
-        //?realtion
         $email = $submission->contactForm->email;
         if($email){
             event(new AdminMailEvent($submission));
@@ -104,5 +103,27 @@ class ContactFormController extends Controller
         if($sms){
             event(new AdminSmsEvent($submission));
         }
+    }
+    public function filter(Request $request)
+    {
+        $query = ContactForm::query();
+        $search = $request->input('search.value');
+        $orderDir = $request->input('order.0.dir');
+        $orderName = $request->input('order.0.name');
+        $perPage = $request->input('length');
+        $start = $request->input('start');
+        $page = ($start / $perPage) + 1;
+        $query->paginate($perPage, ['*'], 'page', $page);
+        if ($orderDir && $orderName) {
+            $query->orderBy($orderName, $orderDir);
+        }
+        if ($search) {
+            $query->where('title', 'like', '%' . $search . '%');
+        }
+        $result = $query->get();
+        $data = [
+            'data' => $result,
+        ];
+        return response()->json($data);
     }
 }

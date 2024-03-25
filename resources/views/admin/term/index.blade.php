@@ -22,25 +22,21 @@
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     @endif
-    <div class="d-flex justify-content-center" id="pagination-links">
-        {{ $terms->links() }}
-    </div>
     <div class="card">
         <div class="card-body p-0">
-            <table class="table">
+            <table id="term_table" class="display" style="width:100%">
                 <thead>
                     <tr>
-                        <th style="width: 10px">id</th>
+                        <th>id</th>
                         <th>Title</th>
                         <th>Slug</th>
                         <th>Body</th>
-                        <th>Taxonomies</th>
-                        <th>Media</th>
+                        <th>Created At</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($terms as $term)
+                    {{-- @foreach ($terms as $term)
                         <tr>
                             <td>{{ $term->id }}</td>
                             <td>{{ $term->title }}</td>
@@ -61,7 +57,7 @@
                                 <a href="{{ route('term.destroy', Hashids::encode($term->id)) }}"><i class="bi bi-trash"></i></a>
                             </td>
                         </tr>
-                    @endforeach
+                    @endforeach --}}
                 </tbody>
             </table>
         </div>
@@ -96,6 +92,63 @@
     <!-- End Basic Modal-->
 @endsection
 @section('script')
+<script>
+      $(document).ready(function() {
+            $('#term_table').DataTable({
+                "lengthMenu": [
+                    [10, 15, 20],
+                    [10, 15, 20]
+                ],
+                "processing": true,
+                "serverSide": true,
+                "ajax": {
+                    "url": "{{ route('term.filter') }}",
+                    "type": "GET"
+                },
+                "columns": [{
+                        "data": "id",
+                        "name": "id",
+                        "searchable": false
+                    },
+                    {
+                        "data": "title",
+                        "name": "title",
+                        "searchable": true
+                    },
+                    {
+                        "data": "slug",
+                        "name": "slug",
+                        "searchable": true
+                    },
+                    {
+                        "data": "body",
+                        "name": "body",
+                        "searchable": false
+                    },
+                    {
+                        "data": "created_at",
+                        "name": "created_at",
+                        "searchable": false
+                    },
+                    {
+                        "render": function(data, type, row) {
+                            let showButton =
+                                '<a class="show-term-btn" data-toggle="modal" data-target="#showTypeCard" data-id="' +
+                                row.id +
+                                '" style="cursor: pointer"><i class="bi bi-eye-fill"></i></a>';
+                            let editButton =
+                                '<a class="edit-term-btn" data-toggle="modal" data-target="#editTypeForm" data-id="' +
+                                row.id +
+                                '" style="cursor: pointer"><i class="bi bi-pen"></i></a>';
+                            let deleteButton = '<a href="/term/destroy/' + row.id +
+                                '"><i class="bi bi-trash"></i></a>';
+                            return showButton + editButton + deleteButton;
+                        }
+                    }
+                ]
+            });
+        });
+</script>
     <script src="{{ asset('assets/js/term/edit.js') }}"></script>
     <script src="{{ asset('assets/js/term/show.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
