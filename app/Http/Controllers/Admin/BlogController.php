@@ -117,9 +117,10 @@ class BlogController extends Controller
         $slug = SlugService::createSlug(Blog::class, 'slug', $request->title);
         return response()->json(['slug' => $slug]);
     }
-    public function filter(Request $request)
+    public function filter(Request $request,$type)
     {
-        $query = Blog::query();
+        $type = Type::findOrFail($type);
+        $query = $type->blogs()->with('taxonomies');
         $search = $request->input('search.value');
         $orderDir = $request->input('order.0.dir');
         $orderName = $request->input('order.0.name');
