@@ -36,10 +36,9 @@ class BlogController extends Controller
      */
     public function create($type)
     {
-        $media = Media::all();
         $taxonomies = Taxonomy::all();
-        $selectedType = Type::find($type);
-        return view('admin.blog.create', compact('media', 'taxonomies','selectedType'));
+        $type = Type::findOrFail($type);
+        return view('admin.blog.create', compact('taxonomies','type'));
     }
 
     /**
@@ -70,34 +69,37 @@ class BlogController extends Controller
         $blog = Blog::findOrFail($encryptedId);
         return view('admin.blog.show', compact('blog'));
     }
-    public function edit($encryptedId)
+    public function edit($encryptedId,$type)
     {
         // $id = decrypt($encryptedId);
         // $id = Hashids::decode($encryptedId)[0];
+        $type = Type::findOrFail($type);
         $blog = Blog::findOrFail($encryptedId);
         $media = Media::all();
         $taxonomies = Taxonomy::all();
-        return view('admin.blog.edit', compact('blog', 'media', 'taxonomies'));
+        return view('admin.blog.edit', compact('blog', 'media', 'taxonomies','type'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateBlogRequest $request, $encryptedId)
+    public function update(Request $request, $encryptedId)
     {
+        dd($request);
         // $id = decrypt($encryptedId);
         // $id = Hashids::decode($encryptedId)[0];
         $blog = Blog::findOrFail($encryptedId);
+        $type=$request->type_id;
         $taxonomies = $request->taxonomy_id;
         $blog->update([
             'title' => $request->title,
             'slug' => $request->slug,
             'body' => $request->body,
             'media_id' => $request->media_id,
-            'type_id' => $request->type_id,
         ]);
         $blog->taxonomies()->sync($taxonomies);
-        return redirect()->route('blogs.index', ['type' => $request->type_id])->with(['success' => 'Blogs Created Successfully']);
+        $blog->types()->sync($type);
+        return redirect()->route('blogs.index', ['type' => $type])->with(['success' => 'Blogs Created Successfully']);
     }
 
     /**

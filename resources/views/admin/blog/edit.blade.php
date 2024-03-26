@@ -1,7 +1,7 @@
-<form action="{{ route('blog.update', Hashids::encode($blog->id)) }}" method="POST">
+<form action="{{ route('blog.update', $blog->id) }}" method="POST">
     @csrf
     @method('PUT')
-    <input type="hidden" name="type_id" value="{{$blog->type_id}}">
+    <input type="hidden" name="type_id" value="{{$type->id}}">
     <div class="row mb-3">
         <div class="col-sm-10">
             <button type="submit" class="btn btn-primary">

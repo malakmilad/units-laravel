@@ -103,8 +103,7 @@
 @section('script')
     <script>
         $(document).ready(function() {
-            let type = window.location.pathname.split('/').pop();
-            debugger
+            let typeId = window.location.pathname.split('/').pop();
             $('#blog_table').DataTable({
                 "lengthMenu": [
                     [10, 15, 20],
@@ -113,7 +112,7 @@
                 "processing": true,
                 "serverSide": true,
                 "ajax": {
-                    "url": "/blog/filter/" + type,
+                    "url": "/blog/filter/" + typeId,
                     "type": "GET"
                 },
                 "columns": [{
@@ -165,6 +164,7 @@
                             let editButton =
                                 '<a class="edit-blog-btn" data-toggle="modal" data-target="#editBlogForm" data-id="' +
                                 row.id +
+                                '" data-type="' + typeId +
                                 '" style="cursor: pointer"><i class="bi bi-pen"></i></a>';
                             let deleteButton = '<a href="/blog/destroy/' + row.id +
                                 '"><i class="bi bi-trash"></i></a>';

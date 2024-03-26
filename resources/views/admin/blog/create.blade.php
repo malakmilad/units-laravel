@@ -10,7 +10,7 @@
     <h5 class="card-title">Add New Blog</h5>
     <form action="{{ route('blog.store') }}" method="POST">
         @csrf
-        <input type="hidden" name="type_id" value="{{$selectedType->id}}">
+        <input type="hidden" name="type_id" value="{{$type->id}}">
         <div class="row mb-3">
             <div class="col-sm-10">
                 <button type="submit" class="btn btn-primary">
