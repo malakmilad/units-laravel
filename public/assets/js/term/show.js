@@ -1,6 +1,6 @@
 $(document).ready(function () {
     let loader = $(".overlay");
-    $('.show-term-btn').click(function () {
+    $("#term_table").on('click', '.show-term-btn', function () {
         let termID = $(this).data('id');
         loader.show();
         $.ajax({

@@ -44,8 +44,8 @@ class TypeController extends Controller
     public function show($encryptedId)
     {
         // $id = decrypt($encryptedId);
-        $id = Hashids::decode($encryptedId)[0];
-        $type = Type::findOrFail($id);
+        // $id = Hashids::decode($encryptedId)[0];
+        $type = Type::findOrFail($encryptedId);
         return view('admin.type.show', compact('type'));
     }
 
@@ -55,8 +55,8 @@ class TypeController extends Controller
     public function edit($encryptedId)
     {
         // $id = decrypt($encryptedId);
-        $id = Hashids::decode($encryptedId)[0];
-        $type = Type::findOrFail($id);
+        // $id = Hashids::decode($encryptedId)[0];
+        $type = Type::findOrFail($encryptedId);
         return view('admin.type.edit', compact('type'));
     }
 
@@ -66,8 +66,8 @@ class TypeController extends Controller
     public function update(UpdateTypeRequest $request, $encryptedId)
     {
         // $id = decrypt($encryptedId);
-        $id = Hashids::decode($encryptedId)[0];
-        $type = Type::findOrFail($id);
+        // $id = Hashids::decode($encryptedId)[0];
+        $type = Type::findOrFail($encryptedId);
         $type->update([
             'name' => $request->name,
         ]);
@@ -81,8 +81,8 @@ class TypeController extends Controller
     public function destroy($encryptedId)
     {
         // $id = decrypt($encryptedId);
-        $id = Hashids::decode($encryptedId)[0];
-        $type = Type::findOrFail($id);
+        // $id = Hashids::decode($encryptedId)[0];
+        $type = Type::findOrFail($encryptedId);
         $type->delete();
         return redirect()->route('types.index')->with(['success' => 'Type Deleted Successfully']);
     }

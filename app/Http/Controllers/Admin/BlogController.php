@@ -13,7 +13,6 @@ use Illuminate\Http\Request;
 use Vinkla\Hashids\Facades\Hashids;
 use App\Http\Controllers\Controller;
 
-use function PHPSTORM_META\type;
 
 class BlogController extends Controller
 {
@@ -28,7 +27,7 @@ class BlogController extends Controller
         $blogs = Blog::join('blog_type', 'blogs.id', '=', 'blog_type.blog_id')
                 ->where('blog_type.type_id', $type->id)
                 ->with('media', 'taxonomies')
-                ->paginate(3);
+                ->get();
         return view('admin.blog.index', compact('blogs'));
     }
 
@@ -67,15 +66,15 @@ class BlogController extends Controller
     public function show($encryptedId)
     {
         // $id = decrypt($encryptedId);
-        $id = Hashids::decode($encryptedId)[0];
-        $blog = Blog::findOrFail($id);
+        // $id = Hashids::decode($encryptedId)[0];
+        $blog = Blog::findOrFail($encryptedId);
         return view('admin.blog.show', compact('blog'));
     }
     public function edit($encryptedId)
     {
         // $id = decrypt($encryptedId);
-        $id = Hashids::decode($encryptedId)[0];
-        $blog = Blog::findOrFail($id);
+        // $id = Hashids::decode($encryptedId)[0];
+        $blog = Blog::findOrFail($encryptedId);
         $media = Media::all();
         $taxonomies = Taxonomy::all();
         return view('admin.blog.edit', compact('blog', 'media', 'taxonomies'));
@@ -87,8 +86,8 @@ class BlogController extends Controller
     public function update(UpdateBlogRequest $request, $encryptedId)
     {
         // $id = decrypt($encryptedId);
-        $id = Hashids::decode($encryptedId)[0];
-        $blog = Blog::findOrFail($id);
+        // $id = Hashids::decode($encryptedId)[0];
+        $blog = Blog::findOrFail($encryptedId);
         $taxonomies = $request->taxonomy_id;
         $blog->update([
             'title' => $request->title,
@@ -107,8 +106,8 @@ class BlogController extends Controller
     public function destroy($encryptedId)
     {
         // $id = decrypt($encryptedId);
-        $id = Hashids::decode($encryptedId)[0];
-        $blog = Blog::findOrFail($id);
+        // $id = Hashids::decode($encryptedId)[0];
+        $blog = Blog::findOrFail($encryptedId);
         $blog->taxonomies()->detach();
         $blog->delete();
         return redirect()->route('blogs.index',['type'])->with(['success' => 'Blog Deleted Successfully']);

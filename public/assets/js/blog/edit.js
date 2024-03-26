@@ -1,6 +1,6 @@
 $(document).ready(function () {
     let loader = $(".overlay");
-    $('.edit-blog-btn').click(function () {
+    $("#blog_table").on('click', '.edit-blog-btn', function () {
         let blogID = $(this).data('id');
         loader.show();
         $.ajax({

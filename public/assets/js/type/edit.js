@@ -1,6 +1,6 @@
 $(document).ready(function () {
     let loader = $(".overlay");
-    $('.edit-type-btn').click(function () {
+    $("#type_table").on('click', '.edit-type-btn', function () {
         let typeId = $(this).data('id');
         loader.show();
         $.ajax({
@@ -16,5 +16,5 @@ $(document).ready(function () {
                 console.error(xhr.responseText);
             }
         });
-    });
+    })
 });

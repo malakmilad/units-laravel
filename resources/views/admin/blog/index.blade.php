@@ -21,25 +21,22 @@
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     @endif
-    <div class="d-flex justify-content-center" id="pagination-links">
-        {{ $blogs->links() }}
-    </div>
     <div class="card">
         <div class="card-body p-0">
-            <table class="table">
+            <table id="blog_table" class="display" style="width:100%">
                 <thead>
                     <tr>
-                        <th style="width: 10px">id</th>
+                        <th>id</th>
                         <th>Title</th>
                         <th>Slug</th>
                         <th>Body</th>
-                        <th>Taxonomies</th>
-                        <th>Image</th>
+                        {{-- <th>Taxonomies</th> --}}
+                        {{-- <th>Image</th> --}}
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($blogs as $blog)
+                    {{-- @foreach ($blogs as $blog)
                         <tr>
                             <td>{{ $blog->id }}</td>
                             <td>{{ $blog->title }}</td>
@@ -69,7 +66,7 @@
                                         class="bi bi-trash"></i></a>
                             </td>
                         </tr>
-                    @endforeach
+                    @endforeach --}}
                 </tbody>
             </table>
         </div>
@@ -104,6 +101,63 @@
     <!-- End Basic Modal-->
 @endsection
 @section('script')
+<script>
+    $(document).ready(function() {
+        $('#blog_table').DataTable({
+            "lengthMenu": [
+                [10, 15, 20],
+                [10, 15, 20]
+            ],
+            "processing": true,
+            "serverSide": true,
+            "ajax": {
+                "url": "{{ route('blog.filter') }}",
+                "type": "GET"
+            },
+            "columns": [{
+                    "data": "id",
+                    "name": "id",
+                    "searchable": false
+                },
+                {
+                    "data": "title",
+                    "name": "title",
+                    "searchable": true
+                },
+                {
+                    "data": "slug",
+                    "name": "slug",
+                    "searchable": true
+                },
+                {
+                    "data": "body",
+                    "name": "body",
+                    "searchable": true
+                },
+                {
+                    "data": "created_at",
+                    "name": "created_at",
+                    "searchable": false
+                },
+                {
+                    "render": function(data, type, row) {
+                        let showButton =
+                            '<a class="show-blog-btn" data-toggle="modal" data-target="#showBlogCard" data-id="' +
+                            row.id +
+                            '" style="cursor: pointer"><i class="bi bi-eye-fill"></i></a>';
+                        let editButton =
+                            '<a class="edit-blog-btn" data-toggle="modal" data-target="#editBlogForm" data-id="' +
+                            row.id +
+                            '" style="cursor: pointer"><i class="bi bi-pen"></i></a>';
+                        let deleteButton = '<a href="/blog/destroy/' + row.id +
+                            '"><i class="bi bi-trash"></i></a>';
+                        return showButton + editButton + deleteButton;
+                    }
+                }
+            ]
+        });
+    });
+</script>
     <script src="{{ asset('assets/js/blog/edit.js') }}"></script>
     <script src="{{ asset('assets/js/blog/show.js') }}"></script>
 @endsection

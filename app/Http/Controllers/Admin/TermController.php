@@ -54,8 +54,8 @@ class TermController extends Controller
     public function show($encryptedId)
     {
         // $id = decrypt($encryptedId);
-        $id = Hashids::decode($encryptedId)[0];
-        $term = Term::findOrFail($id);
+        // $id = Hashids::decode($encryptedId)[0];
+        $term = Term::findOrFail($encryptedId);
         return view('admin.term.show', compact('term'));
     }
 
@@ -65,8 +65,8 @@ class TermController extends Controller
     public function edit($encryptedId)
     {
         // $id = decrypt($encryptedId);
-        $id = Hashids::decode($encryptedId)[0];
-        $term = Term::findOrFail($id);
+        // $id = Hashids::decode($encryptedId)[0];
+        $term = Term::findOrFail($encryptedId);
         $taxonomies = Taxonomy::all();
         $media = Media::all();
         return view('admin.term.edit', compact('term', 'taxonomies', 'media'));
@@ -78,8 +78,8 @@ class TermController extends Controller
     public function update(UpdateTermRequest $request, $encryptedId)
     {
         // $id = decrypt($encryptedId);
-        $id = Hashids::decode($encryptedId)[0];
-        $term = Term::findOrFail($id);
+        // $id = Hashids::decode($encryptedId)[0];
+        $term = Term::findOrFail($encryptedId);
         $term->update([
             'media_id' => $request->media_id,
             'taxonomy_id' => $request->taxonomy_id,
@@ -96,8 +96,8 @@ class TermController extends Controller
     public function destroy($encryptedId)
     {
         // $id = decrypt($encryptedId);
-        $id = Hashids::decode($encryptedId)[0];
-        $term = Term::findOrFail($id);
+        // $id = Hashids::decode($encryptedId)[0];
+        $term = Term::findOrFail($encryptedId);
         $term->delete();
         return redirect()->route('terms.index')->with(['success' => 'Term Deleted Successfully']);
     }
