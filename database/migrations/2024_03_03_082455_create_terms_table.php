@@ -17,6 +17,8 @@ return new class extends Migration
             $table->foreign('media_id')->references('id')->on('media')->onDelete('cascade');
             $table->unsignedBigInteger('taxonomy_id')->nullable();
             $table->foreign('taxonomy_id')->references('id')->on('taxonomies')->onDelete('cascade');
+            $table->unsignedBigInteger('sub_term_id')->nullable();
+            $table->foreign('sub_term_id')->references('id')->on('sub_terms')->onDelete('cascade');
             $table->string('title');
             $table->string('slug');
             $table->text('body');

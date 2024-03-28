@@ -29,9 +29,11 @@
                         <th>id</th>
                         <th>Title</th>
                         <th>Slug</th>
-                        <th>Body</th>
-                        <th>Taxonomies</th>
-                        <th>Type</th>
+                        @foreach ($taxonomies as $taxonomy)
+                            <th class="tax" data-id="{{ $taxonomy->id }}">{{ $taxonomy->title }}
+                            </th>
+                        @endforeach
+                        <th>Start time</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -103,71 +105,84 @@
 @section('script')
     <script>
         $(document).ready(function() {
-            let typeId = window.location.pathname.split('/').pop();
-            $('#blog_table').DataTable({
-                "lengthMenu": [
+            const typeId = window.location.pathname.split('/').pop();
+            const table = $('#blog_table').DataTable({
+                initComplete: function() {
+                    const api = this.api();
+                    const taxonomies = @json($taxonomies);
+                    taxonomies.forEach(function(taxonomy) {
+                        $.ajax({
+                            url: `/fetch_terms/${taxonomy.id}`,
+                            type: 'GET',
+                            success: function(response) {
+                                api.columns('.tax[data-id="' + taxonomy.id + '"]').every(function() {
+                                    const column = this;
+                                    const select = $(
+                                            '<select><option value=""></option></select>'
+                                        )
+                                        .appendTo($(column.header()))
+                                        .on('change', function() {
+                                            column.search(select
+                                        .val(), {
+                                                exact: true
+                                            }).draw();
+                                        });
+                                    $.each(response, function(key, value) {
+                                        select.append(
+                                            `<option value="${value.id}">${value.title}</option>`
+                                        );
+                                    });
+                                });
+                            }
+                        });
+                    })
+                },
+                lengthMenu: [
                     [10, 15, 20],
                     [10, 15, 20]
                 ],
-                "processing": true,
-                "serverSide": true,
-                "ajax": {
-                    "url": "/blog/filter/" + typeId,
-                    "type": "GET"
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    url: `/blog/filter/${typeId}`,
+                    type: 'GET'
                 },
-                "columns": [{
-                        "data": "id",
-                        "name": "id",
-                        "searchable": false
+                columns: [{
+                        data: 'id',
+                        name: 'id',
+                        searchable: false
                     },
                     {
-                        "data": "title",
-                        "name": "title",
-                        "searchable": true
+                        data: 'title',
+                        name: 'title',
+                        searchable: true
                     },
                     {
-                        "data": "slug",
-                        "name": "slug",
-                        "searchable": true
+                        data: 'slug',
+                        name: 'slug',
+                        searchable: true
+                    },
+                    @foreach ($taxonomies as $taxonomy)
+                        {
+                            data: '{{ $taxonomy->slug }}',
+                            name: '{{ $taxonomy->slug }}',
+                            id: '{{ $taxonomy->id }}',
+                            searchable: false,
+                            orderable: false
+                        },
+                    @endforeach {
+                        data: 'created_at',
+                        name: 'created_at',
+                        searchable: false
                     },
                     {
-                        "data": "body",
-                        "name": "body",
-                        "searchable": true
-                    },
-                    {
-                        "data": "taxonomies",
-                        "name": "taxonomies",
-                        "searchable": false,
-                        "render": function(data, type, row) {
-                            let taxonomiesHtml = '';
-                            if (row.taxonomies && row.taxonomies.length > 0) {
-                                row.taxonomies.forEach(function(taxonomy) {
-                                    taxonomiesHtml += taxonomy.title + ',';
-                                });
-                            }
-                            return taxonomiesHtml;
-                        }
-
-                    },
-                    {
-                        "data": "created_at",
-                        "name": "created_at",
-                        "searchable": false
-                    },
-                    {
-                        "render": function(data, type, row) {
-                            let showButton =
-                                '<a class="show-blog-btn" data-toggle="modal" data-target="#showBlogCard" data-id="' +
-                                row.id +
-                                '" style="cursor: pointer"><i class="bi bi-eye-fill"></i></a>';
-                            let editButton =
-                                '<a class="edit-blog-btn" data-toggle="modal" data-target="#editBlogForm" data-id="' +
-                                row.id +
-                                '" data-type="' + typeId +
-                                '" style="cursor: pointer"><i class="bi bi-pen"></i></a>';
-                            let deleteButton = '<a href="/blog/destroy/' + row.id +
-                                '"><i class="bi bi-trash"></i></a>';
+                        render: function(data, type, row) {
+                            const showButton =
+                                `<a class="show-blog-btn" data-toggle="modal" data-target="#showBlogCard" data-id="${row.id}" style="cursor: pointer"><i class="bi bi-eye-fill"></i></a>`;
+                            const editButton =
+                                `<a class="edit-blog-btn" data-toggle="modal" data-target="#editBlogForm" data-id="${row.id}" data-type="${typeId}" style="cursor: pointer"><i class="bi bi-pen"></i></a>`;
+                            const deleteButton =
+                                `<a href="/blog/destroy/${row.id}"><i class="bi bi-trash"></i></a>`;
                             return showButton + editButton + deleteButton;
                         }
                     }

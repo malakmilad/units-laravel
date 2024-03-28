@@ -84,6 +84,21 @@
                 </div>
                 <div class="card">
                     <div class="card-body">
+                        <h5 class="card-title">SubTerm</h5>
+                        <div class="row mb-3">
+                            <div class="col-sm-10">
+                                <select class="form-select" aria-label="Default select example" name="sub_term_id">
+                                    <option value="">Select...</option>
+                                    @foreach ($subTerms as $subTerms)
+                                        <option value="{{ $subTerms->id}}">{{ $subTerms->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
                         <h5 class="card-title">Featured Image</h5>
                         <div class="row mb-3">
                             <div class="col-sm-10">

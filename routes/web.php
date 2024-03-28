@@ -46,6 +46,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/blog/destroy/{blog}',[BlogController::class,'destroy'])->name('blog.destroy');
     Route::get('/blog/slug',[BlogController::class,'slug'])->name('blog.slug');
     Route::get('/blog/filter/{type}',[BlogController::class,'filter'])->name('blog.filter');
+    Route::get('/fetch_terms/{tax}', [BlogController::class, 'fetchTerms'])->name('fetch.terms');
+
 
     //?media
     Route::get('/media',[MediaController::class,'index'])->name('media.index');

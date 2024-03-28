@@ -1,15 +1,16 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
+
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreTermRequest;
 use App\Http\Requests\UpdateTermRequest;
 use App\Models\Media;
+use App\Models\SubTerm;
 use App\Models\Taxonomy;
 use App\Models\Term;
 use Cviebrock\EloquentSluggable\Services\SlugService;
 use Illuminate\Http\Request;
-use Vinkla\Hashids\Facades\Hashids;
 
 class TermController extends Controller
 {
@@ -18,6 +19,7 @@ class TermController extends Controller
      */
     public function index()
     {
+
         $terms = Term::with('media', 'taxonomy')->paginate(3);
         return view('admin.term.index', compact('terms'));
     }
@@ -27,9 +29,10 @@ class TermController extends Controller
      */
     public function create()
     {
+        $subTerms = SubTerm::all();
         $taxonomies = Taxonomy::all();
         $media = Media::all();
-        return view('admin.term.create', compact('taxonomies', 'media'));
+        return view('admin.term.create', compact('taxonomies', 'media', 'subTerms'));
     }
 
     /**
@@ -38,12 +41,15 @@ class TermController extends Controller
     public function store(StoreTermRequest $request)
     {
         $media = Media::where("full-path", $request->url)->get()->toArray();
+        $media_id = !empty($media) ? $media[0]['id'] : null;
+        $subTerm_id = !(empty($request->sub_term_id)) ? $request->sub_term_id : null;
         Term::create([
-            'media_id' => $media[0]['id'],
+            'media_id' => $media_id,
             'taxonomy_id' => $request->taxonomy_id,
             'title' => $request->title,
             'slug' => $request->slug,
             'body' => $request->body,
+            'sub_term_id' => $subTerm_id,
         ]);
         return redirect()->route('terms.index')->with(['success' => 'Term Created Successfully']);
     }

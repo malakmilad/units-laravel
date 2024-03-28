@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 class Term extends Model
 {
     use HasFactory,Sluggable;
-    protected $fillable = ['media_id', 'taxonomy_id', 'title', 'slug', 'body'];
+    protected $fillable = ['media_id', 'taxonomy_id', 'title', 'slug', 'body','sub_term_id'];
     public function sluggable(): array
     {
         return [

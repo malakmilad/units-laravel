@@ -39,11 +39,12 @@ class TaxonomyController extends Controller
     {
         $types = $request->type_id;
         $media = Media::where("full-path", $request->url)->get()->toArray();
+        $media_id = !empty($media) ? $media[0]['id'] : null;
         $taxonomy = Taxonomy::create([
             'title' => $request->title,
             'slug' => $request->slug,
             'body' => $request->body,
-            'media_id' => $media[0]['id'],
+            'media_id' => $media_id,
         ]);
         $taxonomy->types()->attach($types);
         return redirect()->route('taxonomies.index')->with(['success' => 'Taxonomy Created Successfully']);

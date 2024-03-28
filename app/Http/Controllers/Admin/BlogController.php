@@ -2,17 +2,15 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreBlogRequest;
-use App\Http\Requests\UpdateBlogRequest;
 use App\Models\Blog;
 use App\Models\Media;
 use App\Models\Taxonomy;
+use App\Models\Term;
 use App\Models\Type;
 use Cviebrock\EloquentSluggable\Services\SlugService;
 use Illuminate\Http\Request;
-use Vinkla\Hashids\Facades\Hashids;
-use App\Http\Controllers\Controller;
-
 
 class BlogController extends Controller
 {
@@ -21,14 +19,16 @@ class BlogController extends Controller
      */
     public function index($type)
     {
+
         $type = Type::findOrFail($type);
+        $taxonomies = $type->taxonomies;
         // $blogs = $type->blogs()->with('media', 'taxonomies')->paginate(3);
         //?another solution
         $blogs = Blog::join('blog_type', 'blogs.id', '=', 'blog_type.blog_id')
-                ->where('blog_type.type_id', $type->id)
-                ->with('media', 'taxonomies')
-                ->get();
-        return view('admin.blog.index', compact('blogs'));
+            ->where('blog_type.type_id', $type->id)
+            ->with('media', 'taxonomies')
+            ->get();
+        return view('admin.blog.index', compact('blogs', 'taxonomies'));
     }
 
     /**
@@ -38,7 +38,7 @@ class BlogController extends Controller
     {
         $taxonomies = Taxonomy::all();
         $type = Type::findOrFail($type);
-        return view('admin.blog.create', compact('taxonomies','type'));
+        return view('admin.blog.create', compact('taxonomies', 'type'));
     }
 
     /**
@@ -47,13 +47,14 @@ class BlogController extends Controller
     public function store(StoreBlogRequest $request)
     {
         $taxonomies = $request->taxonomy_id;
-        $types=$request->type_id;
+        $types = $request->type_id;
         $media = Media::where("full-path", $request->url)->get()->toArray();
+        $media_id = !empty($media) ? $media[0]['id'] : null;
         $blog = Blog::create([
             'title' => $request->title,
             'slug' => $request->slug,
             'body' => $request->body,
-            'media_id' =>  $media[0]['id'],
+            'media_id' => $media_id,
         ]);
         $blog->taxonomies()->attach($taxonomies);
         $blog->types()->attach($types);
@@ -69,7 +70,7 @@ class BlogController extends Controller
         $blog = Blog::findOrFail($encryptedId);
         return view('admin.blog.show', compact('blog'));
     }
-    public function edit($encryptedId,$type)
+    public function edit($encryptedId, $type)
     {
         // $id = decrypt($encryptedId);
         // $id = Hashids::decode($encryptedId)[0];
@@ -77,7 +78,7 @@ class BlogController extends Controller
         $blog = Blog::findOrFail($encryptedId);
         $media = Media::all();
         $taxonomies = Taxonomy::all();
-        return view('admin.blog.edit', compact('blog', 'media', 'taxonomies','type'));
+        return view('admin.blog.edit', compact('blog', 'media', 'taxonomies', 'type'));
     }
 
     /**
@@ -85,11 +86,11 @@ class BlogController extends Controller
      */
     public function update(Request $request, $encryptedId)
     {
-        dd($request);
+        // dd($request);
         // $id = decrypt($encryptedId);
         // $id = Hashids::decode($encryptedId)[0];
         $blog = Blog::findOrFail($encryptedId);
-        $type=$request->type_id;
+        $type = $request->type_id;
         $taxonomies = $request->taxonomy_id;
         $blog->update([
             'title' => $request->title,
@@ -99,7 +100,7 @@ class BlogController extends Controller
         ]);
         $blog->taxonomies()->sync($taxonomies);
         $blog->types()->sync($type);
-        return redirect()->route('blogs.index', ['type' => $type])->with(['success' => 'Blogs Created Successfully']);
+        return redirect()->route('blogs.index', ['type' => $type])->with(['success' => 'Blogs Updated Successfully']);
     }
 
     /**
@@ -112,14 +113,20 @@ class BlogController extends Controller
         $blog = Blog::findOrFail($encryptedId);
         $blog->taxonomies()->detach();
         $blog->delete();
-        return redirect()->route('blogs.index',['type'])->with(['success' => 'Blog Deleted Successfully']);
+        return redirect()->route('blogs.index', ['type'])->with(['success' => 'Blog Deleted Successfully']);
     }
     public function slug(Request $request)
     {
         $slug = SlugService::createSlug(Blog::class, 'slug', $request->title);
         return response()->json(['slug' => $slug]);
     }
-    public function filter(Request $request,$type)
+    public function fetchTerms($tax)
+    {
+        $taxonomy = Taxonomy::findOrFail($tax);
+        $terms = Term::where('taxonomy_id', $taxonomy->id)->get();
+        return response()->json($terms);
+    }
+    public function filter(Request $request, $type)
     {
         $type = Type::findOrFail($type);
         $query = $type->blogs()->with('taxonomies');
