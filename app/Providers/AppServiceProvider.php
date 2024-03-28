@@ -23,8 +23,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // $types=Type::all();
-        View::share('types',Type::all());
+        $types=Type::with('taxonomies')->get();
+        View::share('types',$types);
         View::share('settings',Setting::get(['key','value']));
         Paginator::useBootstrap();
     }

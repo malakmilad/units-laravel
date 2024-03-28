@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreTermRequest;
 use App\Http\Requests\UpdateTermRequest;
 use App\Models\Media;
-use App\Models\SubTerm;
 use App\Models\Taxonomy;
 use App\Models\Term;
 use Cviebrock\EloquentSluggable\Services\SlugService;
@@ -17,22 +16,21 @@ class TermController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index($tax)
     {
-
-        $terms = Term::with('media', 'taxonomy')->paginate(3);
-        return view('admin.term.index', compact('terms'));
+        $taxonomy = Taxonomy::findOrFail($tax);
+        $terms = $taxonomy->terms()->get();
+        return view('admin.term.index', compact('terms', 'taxonomy'));
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create($tax)
     {
-        $subTerms = SubTerm::all();
-        $taxonomies = Taxonomy::all();
-        $media = Media::all();
-        return view('admin.term.create', compact('taxonomies', 'media', 'subTerms'));
+        $taxonomy = Taxonomy::findOrFail($tax);
+        $terms = Term::get();
+        return view('admin.term.create', compact('taxonomy', 'terms'));
     }
 
     /**
@@ -51,7 +49,7 @@ class TermController extends Controller
             'body' => $request->body,
             'sub_term_id' => $subTerm_id,
         ]);
-        return redirect()->route('terms.index')->with(['success' => 'Term Created Successfully']);
+        return redirect()->route('terms.index', ['taxonomy' => $request->taxonomy_id])->with(['success' => 'Term Created Successfully']);
     }
 
     /**
@@ -68,14 +66,14 @@ class TermController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit($encryptedId)
+    public function edit($encryptedId, $tax)
     {
         // $id = decrypt($encryptedId);
         // $id = Hashids::decode($encryptedId)[0];
+        $taxonomy = Taxonomy::findOrFail($tax);
         $term = Term::findOrFail($encryptedId);
-        $taxonomies = Taxonomy::all();
-        $media = Media::all();
-        return view('admin.term.edit', compact('term', 'taxonomies', 'media'));
+        $media = Media::get();
+        return view('admin.term.edit', compact('term', 'taxonomy', 'media'));
     }
 
     /**
@@ -112,9 +110,10 @@ class TermController extends Controller
         $slug = SlugService::createSlug(Term::class, 'slug', $request->title);
         return response()->json(['slug' => $slug]);
     }
-    public function filter(Request $request)
+    public function filter(Request $request,$tax)
     {
-        $query = Term::query();
+        $taxonomy = Taxonomy::findOrFail($tax);
+        $query = $taxonomy->terms();
         $search = $request->input('search.value');
         $orderDir = $request->input('order.0.dir');
         $orderName = $request->input('order.0.name');

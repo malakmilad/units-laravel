@@ -26,4 +26,8 @@ class Term extends Model
     {
         return $this->belongsTo(Taxonomy::class);
     }
+    public function blogs()
+    {
+        return $this->belongsToMany(Blog::class);
+    }
 }

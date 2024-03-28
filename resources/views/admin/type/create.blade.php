@@ -36,6 +36,26 @@
                     </div>
                 </div>
             </div>
+            <div class="col-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Taxonomies</h5>
+                        <div class="row mb-3">
+                            <div class="col-sm-10">
+                                @foreach ($taxonomies as $taxonomy)
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="gridCheck1" name="taxonomy_id[]"
+                                            value="{{ $taxonomy->id }}">
+                                        <label class="form-check-label" for="gridCheck1">
+                                            {{ $taxonomy->title }}
+                                        </label>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </form>
 @endsection

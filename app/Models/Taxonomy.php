@@ -30,4 +30,8 @@ class Taxonomy extends Model
     {
         return $this->belongsToMany(Type::class);
     }
+    public function terms()
+    {
+        return $this->hasMany(Term::class);
+    }
 }

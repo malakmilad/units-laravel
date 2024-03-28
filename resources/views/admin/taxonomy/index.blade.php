@@ -24,47 +24,23 @@
     @endif
     <div class="card">
         <div class="card-body p-0">
+            <a href="{{ route('taxonomy.create') }}" class="btn btn-primary">
+                <i class="bi bi-star me-1">
+                </i>
+                <span>Add New</span>
+            </a>
             <table id="tax" class="display" style="width:100%">
                 <thead>
                     <tr>
                         <th>Id</th>
                         <th>Title</th>
-                        <th>Slug</th>
                         <th>Body</th>
+                        <th>Post Types</th>
                         <th>Created At</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {{-- @foreach ($taxonomies as $taxonomy)
-                        <tr>
-                            <th>{{ $taxonomy->id }}</th>
-                            <th>{{ $taxonomy->title }}</th>
-                            <th>{{ $taxonomy->slug }}</th>
-                            <th>{{ $taxonomy->body }}</th>
-                            <th>
-                                @php
-                                    $types = $taxonomy->types;
-                                @endphp
-                                @foreach ($types as $type)
-                                    {{ $type->name }},
-                                @endforeach
-                            </th>
-                            <th>{{ $taxonomy->created_at }}</th>
-                            <th>
-                                <a class="show-tax-btn" data-toggle="modal" data-target="#showTaxCard"
-                                    data-id="{{ Hashids::encode($taxonomy->id) }}" style="cursor: pointer">
-                                    <i class="bi bi-eye-fill"></i>
-                                </a>
-                                <a class="edit-tax-btn" data-toggle="modal" data-target="#editTaxForm"
-                                    data-id="{{ Hashids::encode($taxonomy->id) }}" style="cursor: pointer">
-                                    <i class="bi bi-pen"></i>
-                                </a>
-                                <a href="{{ route('taxonomy.destroy', Hashids::encode($taxonomy->id)) }}"><i
-                                        class="bi bi-trash"></i></a>
-                            </th>
-                        </tr>
-                    @endforeach --}}
                 </tbody>
             </table>
         </div>
@@ -123,20 +99,28 @@
                         "searchable": true
                     },
                     {
-                        "data": "slug",
-                        "name": "slug",
-                        "searchable": true
-
-                    },
-                    {
                         "data": "body",
                         "name": "body",
                         "searchable": false
                     },
                     {
+                        "data": "types",
+                        "name": "types",
+                        "searchable": false,
+                        "orderable":false,
+                        "render": function(data, type, row) {
+                            var typeList = '';
+                            data.forEach(function(type) {
+                                typeList += type.name + ', ';
+                            });
+                            return typeList.slice(0, -2);
+                        }
+                    },
+                    {
                         "data": "created_at",
                         "name": "created_at",
-                        "searchable": false
+                        "searchable": false,
+                        "orderable":false,
                     },
                     {
                         "render": function(data, type, row) {

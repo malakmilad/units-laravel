@@ -38,37 +38,6 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {{-- @foreach ($blogs as $blog)
-                        <tr>
-                            <td>{{ $blog->id }}</td>
-                            <td>{{ $blog->title }}</td>
-                            <td>{{ $blog->slug }}</td>
-                            <td>{{ $blog->body }}</td>
-                            <td>
-                                @php
-                                    $taxonomies = $blog->taxonomies;
-                                @endphp
-                                @foreach ($taxonomies as $taxonomy)
-                                    {{ $taxonomy->title }},
-                                @endforeach
-                            </td>
-                            <td><img width="150" height="100"
-                                    src="{{ asset($blog->media->path . '/' . $blog->media->featured_image) }}" alt="">
-                            </td>
-                            <td>
-                                <a class="show-blog-btn" data-toggle="modal" data-target="#showBlogCard"
-                                    data-id="{{ Hashids::encode($blog->id) }}" style="cursor: pointer">
-                                    <i class="bi bi-eye-fill"></i>
-                                </a>
-                                <a class="edit-blog-btn" data-toggle="modal" data-target="#editBlogForm"
-                                    data-id="{{ Hashids::encode($blog->id) }}" style="cursor: pointer">
-                                    <i class="bi bi-pen"></i>
-                                </a>
-                                <a href="{{ route('blog.destroy', Hashids::encode($blog->id)) }}"><i
-                                        class="bi bi-trash"></i></a>
-                            </td>
-                        </tr>
-                    @endforeach --}}
                 </tbody>
             </table>
         </div>
@@ -115,24 +84,25 @@
                             url: `/fetch_terms/${taxonomy.id}`,
                             type: 'GET',
                             success: function(response) {
-                                api.columns('.tax[data-id="' + taxonomy.id + '"]').every(function() {
-                                    const column = this;
-                                    const select = $(
-                                            '<select><option value=""></option></select>'
-                                        )
-                                        .appendTo($(column.header()))
-                                        .on('change', function() {
-                                            column.search(select
-                                        .val(), {
-                                                exact: true
-                                            }).draw();
+                                api.columns('.tax[data-id="' + taxonomy.id + '"]')
+                                    .every(function() {
+                                        const column = this;
+                                        const select = $(
+                                                '<select><option value=""></option></select>'
+                                            )
+                                            .appendTo($(column.header()))
+                                            .on('change', function() {
+                                                column.search(select
+                                                    .val(), {
+                                                        exact: true
+                                                    }).draw();
+                                            });
+                                        $.each(response, function(key, value) {
+                                            select.append(
+                                                `<option value="${value.id}">${value.title}</option>`
+                                            );
                                         });
-                                    $.each(response, function(key, value) {
-                                        select.append(
-                                            `<option value="${value.id}">${value.title}</option>`
-                                        );
                                     });
-                                });
                             }
                         });
                     })
@@ -166,9 +136,18 @@
                         {
                             data: '{{ $taxonomy->slug }}',
                             name: '{{ $taxonomy->slug }}',
-                            id: '{{ $taxonomy->id }}',
                             searchable: false,
-                            orderable: false
+                            orderable: false,
+                            "render": function(data, type, row) {
+                                tax_id = {{ $taxonomy->id }};
+                                var terms_list = '';
+                                row.terms.map((term => {
+                                    if (term.taxonomy_id == tax_id) {
+                                        terms_list += term.body + ", ";
+                                    }
+                                }))
+                                return terms_list.slice(0, -2);
+                            }
                         },
                     @endforeach {
                         data: 'created_at',
@@ -184,7 +163,8 @@
                             const deleteButton =
                                 `<a href="/blog/destroy/${row.id}"><i class="bi bi-trash"></i></a>`;
                             return showButton + editButton + deleteButton;
-                        }
+                        },
+                        orderable: false
                     }
                 ]
             });

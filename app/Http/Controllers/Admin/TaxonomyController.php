@@ -81,16 +81,22 @@ class TaxonomyController extends Controller
      */
     public function update(UpdateTaxonomyRequest $request, $encryptedId)
     {
+        // dd($request);
         // $id = decrypt($encryptedId);
         // $id = Hashids::decode($encryptedId)[0];
+        $types = $request->type_id;
+        $media = Media::where("full-path", $request->url)->get()->toArray();
+        $media_id = !empty($media) ? $media[0]['id'] : null;
         $taxonomy = Taxonomy::findOrFail($encryptedId);
         $taxonomy->update([
             'title' => $request->title,
             'slug' => $request->slug,
             'body' => $request->body,
-            'media_id' => $request->media_id,
-            'type_id' => $request->type_id,
+            'media_id' => $media_id,
         ]);
+        if($types){
+            $taxonomy->types()->sync($types);
+        }
         return redirect()->route('taxonomies.index')->with(['success' => 'Taxonomy Updated Successfully']);
 
     }
@@ -111,27 +117,9 @@ class TaxonomyController extends Controller
         $slug = SlugService::createSlug(Taxonomy::class, 'slug', $request->title);
         return response()->json(['slug' => $slug]);
     }
-    // public function search(Request $request)
-    // {
-    //     $query = Taxonomy::query();
-    //     // Search functionality
-    //     if ($request->has('search')) {
-    //         $searchTerm = $request->input('search');
-    //         $query->where('title', 'like', '%' . $searchTerm . '%');
-    //     }
-    //     // Sorting functionality
-    //     if ($request->has('sort_by') && $request->has('sort_order')) {
-    //         $sortBy = $request->input('sort_by');
-    //         $sortOrder = $request->input('sort_order');
-    //         $query->orderBy($sortBy, $sortOrder);
-    //     }
-    //     // Pagination
-    //     $taxonomies = $query->paginate(3)->withQueryString();
-    //     return view('admin.taxonomy.index', compact('taxonomies'));
-    // }
     public function filter(Request $request)
     {
-        $query = Taxonomy::query();
+        $query = Taxonomy::with('types');
         $search = $request->input('search.value');
         $orderDir = $request->input('order.0.dir');
         $orderName = $request->input('order.0.name');

@@ -24,6 +24,11 @@
     @endif
     <div class="card">
         <div class="card-body p-0">
+            <a href="{{ route('term.create', $taxonomy->id) }}" class="btn btn-primary">
+                <i class="bi bi-star me-1">
+                </i>
+                <span>Add New</span>
+            </a>
             <table id="term_table" class="display" style="width:100%">
                 <thead>
                     <tr>
@@ -36,28 +41,6 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {{-- @foreach ($terms as $term)
-                        <tr>
-                            <td>{{ $term->id }}</td>
-                            <td>{{ $term->title }}</td>
-                            <td>{{ $term->slug }}</td>
-                            <td>{{ $term->body }}</td>
-                            <td>{{ $term->taxonomy->title }}</td>
-                            <td><img width="150" height="100"
-                                    src="{{ asset('FeaturedMedia' . '/' . $term->media->featured_image) }}"></td>
-                            <td>
-                                <a class="show-term-btn" data-toggle="modal" data-target="#showTermCard"
-                                    data-id="{{ Hashids::encode($term->id) }}" style="cursor: pointer">
-                                    <i class="bi bi-eye-fill"></i>
-                                </a>
-                                <a class="edit-term-btn" data-toggle="modal" data-target="#editTermForm"
-                                    data-id="{{ Hashids::encode($term->id) }}" style="cursor: pointer">
-                                    <i class="bi bi-pen"></i>
-                                </a>
-                                <a href="{{ route('term.destroy', Hashids::encode($term->id)) }}"><i class="bi bi-trash"></i></a>
-                            </td>
-                        </tr>
-                    @endforeach --}}
                 </tbody>
             </table>
         </div>
@@ -92,8 +75,9 @@
     <!-- End Basic Modal-->
 @endsection
 @section('script')
-<script>
-      $(document).ready(function() {
+    <script>
+        $(document).ready(function() {
+            const taxId = window.location.pathname.split('/').pop();
             $('#term_table').DataTable({
                 "lengthMenu": [
                     [10, 15, 20],
@@ -102,7 +86,7 @@
                 "processing": true,
                 "serverSide": true,
                 "ajax": {
-                    "url": "{{ route('term.filter') }}",
+                    "url": "/term/filter/{{$taxonomy->id}}",
                     "type": "GET"
                 },
                 "columns": [{
@@ -131,6 +115,7 @@
                         "searchable": false
                     },
                     {
+                        "orderable":false,
                         "render": function(data, type, row) {
                             let showButton =
                                 '<a class="show-term-btn" data-toggle="modal" data-target="#showTypeCard" data-id="' +
@@ -139,16 +124,18 @@
                             let editButton =
                                 '<a class="edit-term-btn" data-toggle="modal" data-target="#editTypeForm" data-id="' +
                                 row.id +
+                                '" data-tax="' + taxId +
                                 '" style="cursor: pointer"><i class="bi bi-pen"></i></a>';
                             let deleteButton = '<a href="/term/destroy/' + row.id +
                                 '"><i class="bi bi-trash"></i></a>';
                             return showButton + editButton + deleteButton;
                         }
+
                     }
                 ]
             });
         });
-</script>
+    </script>
     <script src="{{ asset('assets/js/term/edit.js') }}"></script>
     <script src="{{ asset('assets/js/term/show.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>

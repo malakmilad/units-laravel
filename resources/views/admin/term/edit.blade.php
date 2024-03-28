@@ -1,6 +1,7 @@
-<form action="{{ route('term.update', Hashids::encode($term->id)) }}" method="POST">
+<form action="{{ route('term.update', $term->id) }}" method="POST">
     @csrf
     @method('PUT')
+    <input type="hidden" name="taxonomy_id" value="{{ $taxonomy->id }}">
     <div class="row mb-3">
         <div class="col-sm-10">
             <button type="submit" class="btn btn-primary">
@@ -59,20 +60,6 @@
             </div>
         </div>
         <div class="col-6">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Taxonomies</h5>
-                    <div class="row mb-3">
-                        <div class="col-sm-10">
-                            <select class="form-select" aria-label="Default select example" name="taxonomy_id">
-                                @foreach ($taxonomies as $taxonomy)
-                                    <option value="{{ $taxonomy->id }}">{{ $taxonomy->title }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                </div>
-            </div>
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">Featured Image</h5>

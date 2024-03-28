@@ -77,15 +77,15 @@ Route::middleware('auth')->group(function () {
     Route::get('/type/destroy/{type}',[TypeController::class,'destroy'])->name('type.destroy');
     Route::get('/type/filter',[TypeController::class,'filter'])->name('type.filter');
     //?term
-    Route::get('/terms',[TermController::class,'index'])->name('terms.index');
-    Route::get('/term/create',[TermController::class,'create'])->name('term.create');
+    Route::get('/terms/{taxonomy}',[TermController::class,'index'])->name('terms.index');
+    Route::get('/term/create/{taxonomy}',[TermController::class,'create'])->name('term.create');
     Route::post('/term/store',[TermController::class,'store'])->name('term.store');
     Route::get('/term/show/{term}',[TermController::class,'show'])->name('term.show');
-    Route::get('/term/edit/{term}',[TermController::class,'edit'])->name('term.edit');
+    Route::get('/term/edit/{term}/{tax}',[TermController::class,'edit'])->name('term.edit');
     Route::put('/term/update/{term}',[TermController::class,'update'])->name('term.update');
     Route::get('/term/destroy/{term}',[TermController::class,'destroy'])->name('term.destroy');
     Route::get('/term/slug',[TermController::class,'slug'])->name('term.slug');
-    Route::get('/term/filter',[TermController::class,'filter'])->name('term.filter');
+    Route::get('/term/filter/{tax}',[TermController::class,'filter'])->name('term.filter');
 
     //?setting
     Route::get('/setting/edit',[SettingController::class,'edit'])->name('setting.edit');

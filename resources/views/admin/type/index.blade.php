@@ -9,32 +9,22 @@
     @endif
     <div class="card">
         <div class="card-body p-0">
+            <a href="{{ route('type.create') }}" class="btn btn-primary">
+                <i class="bi bi-star me-1">
+                </i>
+                <span>Add New</span>
+            </a>
             <table id="type_table" class="display" style="width:100%">
                 <thead>
                     <tr>
                         <th>id</th>
                         <th>Name</th>
+                        <th>Taxonomies</th>
+                        <th>Start Time</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {{-- @foreach ($types as $type)
-                        <tr>
-                            <td>{{ $type->id }}</td>
-                            <td>{{ $type->name }}</td>
-                            <td>
-                                <a class="show-type-btn" data-toggle="modal" data-target="#showTypeCard"
-                                    data-id="{{ Hashids::encode($type->id) }}" style="cursor: pointer">
-                                    <i class="bi bi-eye-fill"></i>
-                                </a>
-                                <a class="edit-type-btn" data-toggle="modal" data-target="#editTypeForm"
-                                    data-id="{{ Hashids::encode($type->id) }}" style="cursor: pointer">
-                                    <i class="bi bi-pen"></i>
-                                </a>
-                                <a href="{{ route('type.destroy', Hashids::encode($type->id)) }}"><i class="bi bi-trash"></i></a>
-                            </td>
-                        </tr>
-                    @endforeach --}}
                 </tbody>
             </table>
             <!-- End Basic Modal-->
@@ -91,6 +81,18 @@
                         "data": "name",
                         "name": "name",
                         "searchable": true
+                    },
+                    {
+                        "data": "taxonomies",
+                        "name": "taxonomies",
+                        "orderable":false,
+                        "render": function(data, type, row) {
+                            var taxList = '';
+                            data.forEach(function(taxonomy) {
+                                taxList += taxonomy.title + ', ';
+                            });
+                            return taxList.slice(0, -2);
+                        }
                     },
                     {
                         "data": "created_at",

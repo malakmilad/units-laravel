@@ -25,7 +25,6 @@ class UpdateTaxonomyRequest extends FormRequest
             'title' => 'required',
             'slug' => ['required', 'alpha_dash', 'unique:taxonomies,slug,except,id'],
             'body'=>'required',
-            'type_id'=>'integer'
         ];
     }
 }

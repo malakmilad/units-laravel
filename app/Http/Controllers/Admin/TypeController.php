@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreTypeRequest;
 use App\Http\Requests\UpdateTypeRequest;
+use App\Models\Taxonomy;
 use App\Models\Type;
 use Illuminate\Http\Request;
 use Vinkla\Hashids\Facades\Hashids;
@@ -15,7 +16,7 @@ class TypeController extends Controller
      */
     public function index()
     {
-        $types = Type::get();
+        $types = Type::with('taxonomies')->get();
         return view('admin.type.index', compact('types'));
     }
 
@@ -24,7 +25,8 @@ class TypeController extends Controller
      */
     public function create()
     {
-        return view('admin.type.create');
+        $taxonomies=Taxonomy::all();
+        return view('admin.type.create',compact('taxonomies'));
     }
 
     /**
@@ -32,9 +34,13 @@ class TypeController extends Controller
      */
     public function store(StoreTypeRequest $request)
     {
-        Type::create([
+        $taxonomies = $request->taxonomy_id;
+        $type = Type::create([
             'name' => $request->name,
         ]);
+        if($taxonomies){
+            $type->taxonomies()->attach($taxonomies);
+        }
         return redirect()->route('types.index')->with(['success' => 'Type Created Successfully']);
     }
 
@@ -88,7 +94,7 @@ class TypeController extends Controller
     }
     public function filter(Request $request)
     {
-        $query = Type::query();
+        $query = Type::with('taxonomies');
         $search = $request->input('search.value');
         $orderDir = $request->input('order.0.dir');
         $orderName = $request->input('order.0.name');

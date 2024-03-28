@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="{{ asset('assets/css/summernote.css') }}">
 @endsection
 @section('content')
-    <h5 class="card-title">Add New Blog</h5>
+    <h5 class="card-title">Add New {{$type->name}}</h5>
     <form action="{{ route('blog.store') }}" method="POST">
         @csrf
         <input type="hidden" name="type_id" value="{{$type->id}}">
@@ -69,17 +69,21 @@
                 </div>
             </div>
             <div class="col-6">
+                @foreach ($taxonomies as $taxonomy)
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Taxonomies</h5>
+                        <h5 class="card-title">{{$taxonomy->title}}</h5>
                         <div class="row mb-3">
                             <div class="col-sm-10">
-                                @foreach ($taxonomies as $taxonomy)
+                                @php
+                                    $terms = $taxonomy->terms;
+                                @endphp
+                                @foreach ($terms as $term)
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="gridCheck1" name="taxonomy_id[]"
-                                            value="{{ $taxonomy->id }}">
+                                        <input class="form-check-input" type="checkbox" id="gridCheck1" name="term_id[]"
+                                            value="{{ $term->id }}">
                                         <label class="form-check-label" for="gridCheck1">
-                                            {{ $taxonomy->title }}
+                                            {{ $term->title }}
                                         </label>
                                     </div>
                                 @endforeach
@@ -87,6 +91,7 @@
                         </div>
                     </div>
                 </div>
+                @endforeach
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">Featured Image</h5>

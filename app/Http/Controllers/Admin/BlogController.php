@@ -24,11 +24,11 @@ class BlogController extends Controller
         $taxonomies = $type->taxonomies;
         // $blogs = $type->blogs()->with('media', 'taxonomies')->paginate(3);
         //?another solution
-        $blogs = Blog::join('blog_type', 'blogs.id', '=', 'blog_type.blog_id')
-            ->where('blog_type.type_id', $type->id)
-            ->with('media', 'taxonomies')
-            ->get();
-        return view('admin.blog.index', compact('blogs', 'taxonomies'));
+        // $blogs = Blog::join('blog_type', 'blogs.id', '=', 'blog_type.blog_id')
+        //     ->where('blog_type.type_id', $type->id)
+        //     ->with('media', 'taxonomies')
+        //     ->get();
+        return view('admin.blog.index', compact('taxonomies'));
     }
 
     /**
@@ -36,8 +36,8 @@ class BlogController extends Controller
      */
     public function create($type)
     {
-        $taxonomies = Taxonomy::all();
         $type = Type::findOrFail($type);
+        $taxonomies = $type->taxonomies()->get();
         return view('admin.blog.create', compact('taxonomies', 'type'));
     }
 
@@ -46,7 +46,7 @@ class BlogController extends Controller
      */
     public function store(StoreBlogRequest $request)
     {
-        $taxonomies = $request->taxonomy_id;
+        $terms = $request->term_id;
         $types = $request->type_id;
         $media = Media::where("full-path", $request->url)->get()->toArray();
         $media_id = !empty($media) ? $media[0]['id'] : null;
@@ -56,8 +56,8 @@ class BlogController extends Controller
             'body' => $request->body,
             'media_id' => $media_id,
         ]);
-        $blog->taxonomies()->attach($taxonomies);
         $blog->types()->attach($types);
+        $blog->terms()->attach($terms);
         return redirect()->route('blogs.index', ['type' => $request->type_id])->with(['success' => 'Blogs Created Successfully']);
     }
     /**
@@ -129,7 +129,7 @@ class BlogController extends Controller
     public function filter(Request $request, $type)
     {
         $type = Type::findOrFail($type);
-        $query = $type->blogs()->with('taxonomies');
+        $query = $type->blogs()->with('terms');
         $search = $request->input('search.value');
         $orderDir = $request->input('order.0.dir');
         $orderName = $request->input('order.0.name');
@@ -137,6 +137,16 @@ class BlogController extends Controller
         $start = $request->input('start');
         $page = ($start / $perPage) + 1;
         $query->paginate($perPage, ['*'], 'page', $page);
+        $columns = count($request->input('columns'));
+        for ($i = 0; $i < $columns; $i++) {
+            $filter = $request->input("columns.$i.search.value");
+            if ($filter) {
+                $query->whereHas('terms', function ($q) use ($filter) {
+                    $q->where('term_id', $filter);
+                });
+
+            }
+        }
         if ($orderDir && $orderName) {
             $query->orderBy($orderName, $orderDir);
         }

@@ -10,6 +10,7 @@
     <h5 class="card-title">Add New Term</h5>
     <form action="{{route('term.store')}}" method="POST">
         @csrf
+        <input type="hidden" value="{{$taxonomy->id}}" name="taxonomy_id">
         <div class="row mb-3">
             <div class="col-sm-10">
                 <button type="submit" class="btn btn-primary">
@@ -70,27 +71,13 @@
             <div class="col-6">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Taxonomies</h5>
-                        <div class="row mb-3">
-                            <div class="col-sm-10">
-                                <select class="form-select" aria-label="Default select example" name="taxonomy_id">
-                                    @foreach ($taxonomies as $taxonomy)
-                                        <option value="{{ $taxonomy->id}}">{{ $taxonomy->title }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">SubTerm</h5>
+                        <h5 class="card-title">Parent Category</h5>
                         <div class="row mb-3">
                             <div class="col-sm-10">
                                 <select class="form-select" aria-label="Default select example" name="sub_term_id">
-                                    <option value="">Select...</option>
-                                    @foreach ($subTerms as $subTerms)
-                                        <option value="{{ $subTerms->id}}">{{ $subTerms->name }}</option>
+                                    <option value="">None...</option>
+                                    @foreach ($terms as $term)
+                                        <option value="{{ $term->id}}">{{ $term->title }}</option>
                                     @endforeach
                                 </select>
                             </div>
